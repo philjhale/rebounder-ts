@@ -1,0 +1,3 @@
+# Render with Canvas2D, not a WebGL library
+
+The original uses tk2d (Unity 2D sprite plugin) for straightforward sprite blitting — a few dozen sprites on screen at once, no shader effects, no particle systems. We considered PixiJS (WebGL, better raw throughput, but its own scene-graph API to learn) and plain DOM/SVG (easy hit-testing, poor for many moving sprites). We chose the browser Canvas2D API: no dependency, and its draw-image-at-position model maps 1:1 onto what the original C# already does per frame. Revisit only if profiling shows Canvas2D can't hold frame rate once all ~75 levels' entity counts are ported.
