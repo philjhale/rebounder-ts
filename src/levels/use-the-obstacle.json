@@ -1,0 +1,17 @@
+{
+  "id": "use-the-obstacle",
+  "name": "UseTheObstacle",
+  "launchers": [
+    { "position": { "x": 14, "y": 0 }, "colour": "Orange", "enabled": true }
+  ],
+  "targets": [
+    { "position": { "x": -13.75, "y": 3 }, "colour": "Orange" }
+  ],
+  "obstacles": [
+    { "position": { "x": -5, "y": -6 }, "width": 1, "height": 8 },
+    { "position": { "x": 0, "y": 3 }, "width": 1, "height": 14 }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": { "Orange": 2, "Blue": 0, "Green": 0, "Purple": 0 }
+}
