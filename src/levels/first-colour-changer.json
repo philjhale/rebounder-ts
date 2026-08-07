@@ -1,0 +1,16 @@
+{
+  "id": "first-colour-changer",
+  "name": "FirstColourChanger",
+  "launchers": [
+    { "position": { "x": -7, "y": -9 }, "colour": "Orange", "enabled": true }
+  ],
+  "targets": [
+    { "position": { "x": 14, "y": 3 }, "colour": "Blue" }
+  ],
+  "obstacles": [],
+  "teleporters": [],
+  "colourChangers": [
+    { "position": { "x": 0, "y": -11 }, "colour": "Blue" }
+  ],
+  "lineCounts": { "Orange": 1, "Blue": 0, "Green": 0, "Purple": 0 }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "first-coloured-line",
+  "name": "FirstColouredLine",
+  "launchers": [
+    { "position": { "x": -5, "y": -9 }, "colour": "Blue", "enabled": true },
+    { "position": { "x": 0, "y": -9 }, "colour": "Green", "enabled": true },
+    { "position": { "x": 5, "y": -9 }, "colour": "Purple", "enabled": true }
+  ],
+  "targets": [
+    { "position": { "x": 17, "y": 3 }, "colour": "Green" },
+    { "position": { "x": 17, "y": -3 }, "colour": "Purple" },
+    { "position": { "x": -17, "y": 0 }, "colour": "Blue" }
+  ],
+  "obstacles": [],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": { "Orange": 3, "Blue": 0, "Green": 0, "Purple": 0 }
+}

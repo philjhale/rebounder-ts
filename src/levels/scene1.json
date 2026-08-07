@@ -1,0 +1,14 @@
+{
+  "id": "scene1",
+  "name": "Scene1",
+  "launchers": [
+    { "position": { "x": -9, "y": -9 }, "colour": "Orange", "enabled": true }
+  ],
+  "targets": [
+    { "position": { "x": 17, "y": 0 }, "colour": "Orange" }
+  ],
+  "obstacles": [],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": { "Orange": 1, "Blue": 0, "Green": 0, "Purple": 0 }
+}

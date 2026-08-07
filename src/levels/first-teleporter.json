@@ -1,0 +1,19 @@
+{
+  "id": "first-teleporter",
+  "name": "FirstTeleporter",
+  "launchers": [
+    { "position": { "x": -9, "y": -9 }, "colour": "Orange", "enabled": true }
+  ],
+  "targets": [
+    { "position": { "x": 14, "y": 2 }, "colour": "Orange" }
+  ],
+  "obstacles": [
+    { "position": { "x": 0, "y": 0 }, "width": 1, "height": 31.25 }
+  ],
+  "teleporters": [
+    { "position": { "x": 3, "y": 2 }, "pairId": "A" },
+    { "position": { "x": -3, "y": 2 }, "pairId": "A" }
+  ],
+  "colourChangers": [],
+  "lineCounts": { "Orange": 1, "Blue": 0, "Green": 0, "Purple": 0 }
+}
