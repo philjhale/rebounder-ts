@@ -46,6 +46,31 @@ export function circleVsBox(centre: Vec2, radius: number, box: ObstacleData): Co
   return { normal: { x: 0, y: signY }, penetration: overlapY + radius };
 }
 
+// Circle vs circle. Returns null when the circles don't overlap, otherwise
+// the normal pointing from the second circle's centre towards the first, and
+// how far to push the first circle out along it.
+export function circleVsCircle(
+  centre: Vec2,
+  radius: number,
+  otherCentre: Vec2,
+  otherRadius: number,
+): Collision | null {
+  const dx = centre.x - otherCentre.x;
+  const dy = centre.y - otherCentre.y;
+  const distanceSquared = dx * dx + dy * dy;
+  const radiiSum = radius + otherRadius;
+
+  if (distanceSquared >= radiiSum * radiiSum) return null;
+
+  const distance = Math.sqrt(distanceSquared);
+  if (distance === 0) return { normal: { x: 1, y: 0 }, penetration: radiiSum };
+
+  return {
+    normal: { x: dx / distance, y: dy / distance },
+    penetration: radiiSum - distance,
+  };
+}
+
 // Reflects velocity across a surface normal, matching physical bounce
 // (mirrors incoming direction, preserves speed).
 export function reflect(velocity: Vec2, normal: Vec2): Vec2 {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { circleVsBox, reflect } from './collision';
+import { circleVsBox, circleVsCircle, reflect } from './collision';
 
 describe('circleVsBox', () => {
   const box = { position: { x: 0, y: 0 }, width: 4, height: 2 };
@@ -33,6 +33,25 @@ describe('circleVsBox', () => {
     const collision = circleVsBox({ x: 0, y: 0.5 }, 0.5, box);
     expect(collision).not.toBeNull();
     expect(collision?.normal).toEqual({ x: 0, y: 1 });
+  });
+});
+
+describe('circleVsCircle', () => {
+  it('returns null when the circles are far apart', () => {
+    expect(circleVsCircle({ x: 0, y: 0 }, 0.5, { x: 10, y: 10 }, 0.5)).toBeNull();
+  });
+
+  it('detects an overlap and returns the normal pointing away from the other circle', () => {
+    // Centres 1 unit apart along x, radii sum to 1.5 -> overlap of 0.5.
+    const collision = circleVsCircle({ x: 1, y: 0 }, 1, { x: 0, y: 0 }, 0.5);
+    expect(collision).not.toBeNull();
+    expect(collision?.normal.x).toBeCloseTo(1);
+    expect(collision?.normal.y).toBeCloseTo(0);
+    expect(collision?.penetration).toBeCloseTo(0.5);
+  });
+
+  it('returns null for circles that are just touching or apart', () => {
+    expect(circleVsCircle({ x: 2, y: 0 }, 1, { x: 0, y: 0 }, 1)).toBeNull();
   });
 });
 

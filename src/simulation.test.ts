@@ -3,6 +3,9 @@ import {
   BALL_RADIUS,
   BALL_SPEED,
   LAUNCHER_FIRE_INTERVAL,
+  TARGET_DRAIN_INTERVAL,
+  TARGET_HIT_THRESHOLD,
+  TARGET_RADIUS,
   createInitialState,
   updateGame,
   type GameState,
@@ -122,6 +125,100 @@ describe('updateGame: ball movement', () => {
 
     expect(smallStepState.balls[0].position.x).toBeCloseTo(bigStepState.balls[0].position.x);
     expect(smallStepState.balls[0].position.y).toBeCloseTo(bigStepState.balls[0].position.y);
+  });
+});
+
+describe('updateGame: target scoring', () => {
+  it('increments a target hit count when a same-colour ball reaches it', () => {
+    const level = makeLevel({
+      targets: [{ position: { x: 5, y: 0 }, colour: 'Orange' }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - TARGET_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    expect(state.targets[0].hits).toBe(1);
+  });
+
+  it('bounces the ball but does not score against a different-colour target', () => {
+    const level = makeLevel({
+      targets: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - TARGET_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    expect(state.targets[0].hits).toBe(0);
+    expect(state.balls[0].velocity.x).toBeLessThan(0);
+    expect(Math.hypot(state.balls[0].velocity.x, state.balls[0].velocity.y)).toBeCloseTo(
+      BALL_SPEED,
+    );
+  });
+
+  it('drains one hit after 2 seconds with no further hits', () => {
+    const level = makeLevel({ targets: [{ position: { x: 0, y: 0 }, colour: 'Orange' }] });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      targets: [{ hits: 4, timeSinceLastHitOrDrain: 0 }],
+    };
+
+    state = updateGame(state, NO_INPUT, TARGET_DRAIN_INTERVAL);
+
+    expect(state.targets[0].hits).toBe(3);
+  });
+
+  it('does not drain a target with zero hits', () => {
+    const level = makeLevel({ targets: [{ position: { x: 0, y: 0 }, colour: 'Orange' }] });
+    const state = createInitialState(level);
+
+    const next = updateGame(state, NO_INPUT, TARGET_DRAIN_INTERVAL * 5);
+
+    expect(next.targets[0].hits).toBe(0);
+  });
+
+  it('reports the level complete once every target is at or above the threshold', () => {
+    const level = makeLevel({
+      targets: [
+        { position: { x: 0, y: 0 }, colour: 'Orange' },
+        { position: { x: 10, y: 0 }, colour: 'Blue' },
+      ],
+    });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      targets: [
+        { hits: TARGET_HIT_THRESHOLD, timeSinceLastHitOrDrain: 0 },
+        { hits: TARGET_HIT_THRESHOLD - 1, timeSinceLastHitOrDrain: 0 },
+      ],
+    };
+
+    let next = updateGame(state, NO_INPUT, 0);
+    expect(next.levelComplete).toBe(false);
+
+    state = { ...state, targets: [state.targets[0], { hits: TARGET_HIT_THRESHOLD, timeSinceLastHitOrDrain: 0 }] };
+    next = updateGame(state, NO_INPUT, 0);
+    expect(next.levelComplete).toBe(true);
   });
 });
 

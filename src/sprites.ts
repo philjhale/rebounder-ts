@@ -17,6 +17,10 @@ const SPRITE_NAMES = [
   'TargetBlue',
   'TargetGreen',
   'TargetPurple',
+  'TargetHitOrange',
+  'TargetHitBlue',
+  'TargetHitGreen',
+  'TargetHitPurple',
   'Obstacle',
   'ColourChangerOrangeF1',
   'ColourChangerBlueF1',
@@ -41,6 +45,10 @@ export function launcherInnerSprite(colour: Colour): SpriteName {
 
 export function targetSprite(colour: Colour): SpriteName {
   return `Target${colour}` as SpriteName;
+}
+
+export function targetHitSprite(colour: Colour): SpriteName {
+  return `TargetHit${colour}` as SpriteName;
 }
 
 export function colourChangerSprite(colour: Colour): SpriteName {
