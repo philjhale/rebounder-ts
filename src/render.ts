@@ -1,14 +1,15 @@
-import type { Level } from './types';
+import type { Level, Vec2 } from './types';
 import {
   ballSprite,
   colourChangerSprite,
   launcherInnerSprite,
   launcherSprite,
+  targetHitSprite,
   targetSprite,
   type SpriteName,
 } from './sprites';
 import type { ObstacleData } from './types';
-import { BALL_RADIUS, type Ball } from './simulation';
+import { BALL_RADIUS, TARGET_HIT_THRESHOLD, type Ball, type TargetRuntimeState } from './simulation';
 
 export const WORLD_WIDTH = 40;
 export const WORLD_HEIGHT = 36;
@@ -53,6 +54,38 @@ function drawImageCentred(
   const drawHeight = image.height * scale;
   const screen = worldToScreen(worldX, worldY);
   ctx.drawImage(image, screen.x - drawWidth / 2, screen.y - drawHeight / 2, drawWidth, drawHeight);
+}
+
+// TargetHit pip offsets from the Target's centre, ported from the local
+// transforms of the child TargetHit objects in Target.prefab (bottom to top).
+const TARGET_HIT_OFFSETS: Vec2[] = [
+  { x: 0.5, y: -1.2 },
+  { x: 0.5, y: -0.6 },
+  { x: 0.5, y: 0 },
+  { x: 0.5, y: 0.6 },
+  { x: 0.5, y: 1.2 },
+];
+
+function drawTargetHits(
+  ctx: CanvasRenderingContext2D,
+  sprites: Map<SpriteName, HTMLImageElement>,
+  target: Level['targets'][number],
+  runtime: TargetRuntimeState,
+) {
+  const image = sprites.get(targetHitSprite(target.colour));
+  if (!image) return;
+
+  const scale = scaleToFit(image, 0.5);
+  for (let i = 0; i < Math.min(runtime.hits, TARGET_HIT_THRESHOLD); i++) {
+    const offset = TARGET_HIT_OFFSETS[i];
+    drawImageCentred(
+      ctx,
+      image,
+      target.position.x + offset.x,
+      target.position.y + offset.y,
+      scale,
+    );
+  }
 }
 
 function scaleToFit(image: HTMLImageElement, targetWorldSize: number): number {
@@ -130,6 +163,7 @@ export function renderLevel(
   level: Level,
   sprites: Map<SpriteName, HTMLImageElement>,
   balls: Ball[] = [],
+  targets: TargetRuntimeState[] = [],
 ) {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -159,7 +193,7 @@ export function renderLevel(
     );
   }
 
-  for (const target of level.targets) {
+  level.targets.forEach((target, index) => {
     drawSprite(
       ctx,
       sprites,
@@ -168,7 +202,9 @@ export function renderLevel(
       target.position.y,
       'Target',
     );
-  }
+
+    if (index < targets.length) drawTargetHits(ctx, sprites, target, targets[index]);
+  });
 
   for (const launcher of level.launchers) {
     drawLauncher(

@@ -61,7 +61,7 @@ async function showLevel(level: Level) {
     lastTime = time;
 
     state = updateGame(state, {}, deltaTime);
-    renderLevel(ctx, level, sprites, state.balls);
+    renderLevel(ctx, level, sprites, state.balls, state.targets);
 
     requestAnimationFrame(tick);
   }
