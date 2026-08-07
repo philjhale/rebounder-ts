@@ -1,4 +1,4 @@
-import type { Level } from './types';
+import type { Level, Vec2 } from './types';
 import {
   ballSprite,
   colourChangerSprite,
@@ -58,18 +58,13 @@ function drawImageCentred(
 
 // TargetHit pip offsets from the Target's centre, ported from the local
 // transforms of the child TargetHit objects in Target.prefab (bottom to top).
-const TARGET_HIT_OFFSETS: Vec2Like[] = [
+const TARGET_HIT_OFFSETS: Vec2[] = [
   { x: 0.5, y: -1.2 },
   { x: 0.5, y: -0.6 },
   { x: 0.5, y: 0 },
   { x: 0.5, y: 0.6 },
   { x: 0.5, y: 1.2 },
 ];
-
-interface Vec2Like {
-  x: number;
-  y: number;
-}
 
 function drawTargetHits(
   ctx: CanvasRenderingContext2D,

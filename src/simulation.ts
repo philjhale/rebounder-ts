@@ -1,4 +1,4 @@
-import { circleVsBox, circleVsCircle, reflect } from './collision';
+import { circleVsBox, circleVsCircle, reflect, type Collision } from './collision';
 import type { Colour, Level, Vec2 } from './types';
 
 export const BALL_SPEED = 7;
@@ -89,6 +89,33 @@ function renormalize(velocity: Vec2, speed: number): Vec2 {
   return { x: (velocity.x / magnitude) * speed, y: (velocity.y / magnitude) * speed };
 }
 
+// A Ball only scores against a Target of the same Colour — physical bounce
+// happens regardless of colour, this rule gates scoring only.
+export function colourMatches(a: Colour, b: Colour): boolean {
+  return a === b;
+}
+
+interface BounceResult {
+  position: Vec2;
+  velocity: Vec2;
+}
+
+// Applies a bounce off a collision surface (reflect + push out of overlap),
+// but only when the ball is moving into the surface — a ball already moving
+// away from a shallow overlap is left untouched.
+function resolveBounce(position: Vec2, velocity: Vec2, collision: Collision): BounceResult | null {
+  const movingIntoSurface = velocity.x * collision.normal.x + velocity.y * collision.normal.y < 0;
+  if (!movingIntoSurface) return null;
+
+  return {
+    velocity: reflect(velocity, collision.normal),
+    position: {
+      x: position.x + collision.normal.x * collision.penetration,
+      y: position.y + collision.normal.y * collision.penetration,
+    },
+  };
+}
+
 interface BallStepResult {
   ball: Ball;
   hitTargetIndices: number[];
@@ -105,15 +132,9 @@ function stepBall(ball: Ball, level: Level, deltaTime: number): BallStepResult {
     const collision = circleVsBox(position, BALL_RADIUS, obstacle);
     if (!collision) continue;
 
-    const movingIntoSurface =
-      velocity.x * collision.normal.x + velocity.y * collision.normal.y < 0;
-    if (!movingIntoSurface) continue;
-
-    velocity = reflect(velocity, collision.normal);
-    position = {
-      x: position.x + collision.normal.x * collision.penetration,
-      y: position.y + collision.normal.y * collision.penetration,
-    };
+    const bounce = resolveBounce(position, velocity, collision);
+    if (!bounce) continue;
+    ({ position, velocity } = bounce);
   }
 
   const hitTargetIndices: number[] = [];
@@ -121,17 +142,11 @@ function stepBall(ball: Ball, level: Level, deltaTime: number): BallStepResult {
     const collision = circleVsCircle(position, BALL_RADIUS, target.position, TARGET_RADIUS);
     if (!collision) return;
 
-    const movingIntoSurface =
-      velocity.x * collision.normal.x + velocity.y * collision.normal.y < 0;
-    if (!movingIntoSurface) return;
+    const bounce = resolveBounce(position, velocity, collision);
+    if (!bounce) return;
+    ({ position, velocity } = bounce);
 
-    velocity = reflect(velocity, collision.normal);
-    position = {
-      x: position.x + collision.normal.x * collision.penetration,
-      y: position.y + collision.normal.y * collision.penetration,
-    };
-
-    if (target.colour === ball.colour) hitTargetIndices.push(index);
+    if (colourMatches(target.colour, ball.colour)) hitTargetIndices.push(index);
   });
 
   return {

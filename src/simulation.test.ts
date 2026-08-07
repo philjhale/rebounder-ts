@@ -6,6 +6,7 @@ import {
   TARGET_DRAIN_INTERVAL,
   TARGET_HIT_THRESHOLD,
   TARGET_RADIUS,
+  colourMatches,
   createInitialState,
   updateGame,
   type GameState,
@@ -125,6 +126,16 @@ describe('updateGame: ball movement', () => {
 
     expect(smallStepState.balls[0].position.x).toBeCloseTo(bigStepState.balls[0].position.x);
     expect(smallStepState.balls[0].position.y).toBeCloseTo(bigStepState.balls[0].position.y);
+  });
+});
+
+describe('colourMatches', () => {
+  it('is true for the same colour', () => {
+    expect(colourMatches('Orange', 'Orange')).toBe(true);
+  });
+
+  it('is false for different colours', () => {
+    expect(colourMatches('Orange', 'Blue')).toBe(false);
   });
 });
 
