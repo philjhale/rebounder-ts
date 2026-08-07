@@ -5,7 +5,12 @@ import { renderLevel, CANVAS_WIDTH, CANVAS_HEIGHT } from './render';
 import { createInitialState, updateGame, type GameState } from './simulation';
 import type { Level } from './types';
 
-const app = document.querySelector<HTMLDivElement>('#app')!;
+function required<T>(value: T | null, message: string): T {
+  if (value === null) throw new Error(message);
+  return value;
+}
+
+const app = required(document.querySelector<HTMLDivElement>('#app'), '#app element not found');
 
 let activeGameLoop: { stop: () => void } | null = null;
 
@@ -25,7 +30,7 @@ function showPicker() {
   app.querySelectorAll<HTMLButtonElement>('button[data-level-id]').forEach((button) => {
     button.addEventListener('click', () => {
       const level = levels.find((l) => l.id === button.dataset.levelId);
-      if (level) showLevel(level);
+      if (level) void showLevel(level);
     });
   });
 }
@@ -33,13 +38,17 @@ function showPicker() {
 async function showLevel(level: Level) {
   app.innerHTML = `
     <button class="back-button">&larr; Levels</button>
-    <canvas width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}"></canvas>
+    <canvas width="${String(CANVAS_WIDTH)}" height="${String(CANVAS_HEIGHT)}"></canvas>
   `;
 
-  app.querySelector('.back-button')!.addEventListener('click', showPicker);
+  const backButton = required(
+    app.querySelector<HTMLButtonElement>('.back-button'),
+    '.back-button element not found',
+  );
+  backButton.addEventListener('click', showPicker);
 
-  const canvas = app.querySelector('canvas')!;
-  const ctx = canvas.getContext('2d')!;
+  const canvas = required(app.querySelector('canvas'), 'canvas element not found');
+  const ctx = required(canvas.getContext('2d'), 'could not get 2d context');
   const sprites = await loadSprites();
 
   let state: GameState = createInitialState(level);
