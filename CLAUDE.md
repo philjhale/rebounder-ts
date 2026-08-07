@@ -1,6 +1,6 @@
 ## Workflow
 
-- Do new work in a new git worktree (not directly on `main`) — create a branch and `git worktree add` before editing.
+- Do new work in a new git worktree (not directly on `main`) — create a branch and `git worktree add .worktrees/<branch> -b <branch>` before editing.
 
 ## Agent skills
 
