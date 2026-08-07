@@ -2,7 +2,7 @@
   "id": "first-teleporter",
   "name": "FirstTeleporter",
   "launchers": [
-    { "position": { "x": -9, "y": -9 }, "colour": "Orange", "enabled": true }
+    { "position": { "x": -9, "y": -9 }, "colour": "Orange", "enabled": true, "angle": 0 }
   ],
   "targets": [
     { "position": { "x": 14, "y": 2 }, "colour": "Orange" }

@@ -9,6 +9,9 @@ export interface LauncherData {
   position: Vec2;
   colour: Colour;
   enabled: boolean;
+  // Degrees, matching the original's z-rotation: 0 fires straight up
+  // (+y), and the fire direction is (-sin(angle), cos(angle)).
+  angle: number;
 }
 
 export interface TargetData {

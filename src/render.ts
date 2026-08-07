@@ -1,5 +1,6 @@
 import type { Level } from './types';
 import {
+  ballSprite,
   colourChangerSprite,
   launcherInnerSprite,
   launcherSprite,
@@ -7,6 +8,7 @@ import {
   type SpriteName,
 } from './sprites';
 import type { ObstacleData } from './types';
+import { BALL_RADIUS, type Ball } from './simulation';
 
 export const WORLD_WIDTH = 40;
 export const WORLD_HEIGHT = 36;
@@ -29,11 +31,15 @@ function worldToScreen(x: number, y: number): { x: number; y: number } {
 // 32x32px) — the pixel-to-world scale that made them line up isn't present
 // in this repo. Each sprite is instead drawn at a fixed world-unit size for
 // its longer edge, preserving its own aspect ratio.
-const SPRITE_WORLD_SIZE: Record<'Launcher' | 'Target' | 'ColourChanger' | 'Teleporter', number> = {
+const SPRITE_WORLD_SIZE: Record<
+  'Launcher' | 'Target' | 'ColourChanger' | 'Teleporter' | 'Ball',
+  number
+> = {
   Launcher: 2.4,
   Target: 3,
   ColourChanger: 2,
   Teleporter: 2,
+  Ball: BALL_RADIUS * 2,
 };
 
 function drawImageCentred(
@@ -120,6 +126,7 @@ export function renderLevel(
   ctx: CanvasRenderingContext2D,
   level: Level,
   sprites: Map<SpriteName, HTMLImageElement>,
+  balls: Ball[] = [],
 ) {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -169,5 +176,9 @@ export function renderLevel(
       launcher.position.x,
       launcher.position.y,
     );
+  }
+
+  for (const ball of balls) {
+    drawSprite(ctx, sprites, ballSprite(ball.colour), ball.position.x, ball.position.y, 'Ball');
   }
 }

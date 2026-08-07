@@ -29,6 +29,7 @@ describe('level data', () => {
       expectVec2(launcher.position);
       expect(VALID_COLOURS).toContain(launcher.colour);
       expect(typeof launcher.enabled).toBe('boolean');
+      expect(typeof launcher.angle).toBe('number');
     }
 
     for (const target of level.targets) {

@@ -2,7 +2,7 @@
   "id": "first-colour-changer",
   "name": "FirstColourChanger",
   "launchers": [
-    { "position": { "x": -7, "y": -9 }, "colour": "Orange", "enabled": true }
+    { "position": { "x": -7, "y": -9 }, "colour": "Orange", "enabled": true, "angle": 0 }
   ],
   "targets": [
     { "position": { "x": 14, "y": 3 }, "colour": "Blue" }
