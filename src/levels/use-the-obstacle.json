@@ -2,7 +2,7 @@
   "id": "use-the-obstacle",
   "name": "UseTheObstacle",
   "launchers": [
-    { "position": { "x": 14, "y": 0 }, "colour": "Orange", "enabled": true }
+    { "position": { "x": 14, "y": 0 }, "colour": "Orange", "enabled": true, "angle": 90 }
   ],
   "targets": [
     { "position": { "x": -13.75, "y": 3 }, "colour": "Orange" }

@@ -2,9 +2,9 @@
   "id": "first-coloured-line",
   "name": "FirstColouredLine",
   "launchers": [
-    { "position": { "x": -5, "y": -9 }, "colour": "Blue", "enabled": true },
-    { "position": { "x": 0, "y": -9 }, "colour": "Green", "enabled": true },
-    { "position": { "x": 5, "y": -9 }, "colour": "Purple", "enabled": true }
+    { "position": { "x": -5, "y": -9 }, "colour": "Blue", "enabled": true, "angle": 0 },
+    { "position": { "x": 0, "y": -9 }, "colour": "Green", "enabled": true, "angle": 0 },
+    { "position": { "x": 5, "y": -9 }, "colour": "Purple", "enabled": true, "angle": 0 }
   ],
   "targets": [
     { "position": { "x": 17, "y": 3 }, "colour": "Green" },

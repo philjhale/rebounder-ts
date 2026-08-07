@@ -1,6 +1,10 @@
 import type { Colour } from './types';
 
 const SPRITE_NAMES = [
+  'BallOrange',
+  'BallBlue',
+  'BallGreen',
+  'BallPurple',
   'LauncherOrange',
   'LauncherBlue',
   'LauncherGreen',
@@ -22,6 +26,10 @@ const SPRITE_NAMES = [
 ] as const;
 
 export type SpriteName = (typeof SPRITE_NAMES)[number];
+
+export function ballSprite(colour: Colour): SpriteName {
+  return `Ball${colour}` as SpriteName;
+}
 
 export function launcherSprite(colour: Colour): SpriteName {
   return `Launcher${colour}` as SpriteName;
