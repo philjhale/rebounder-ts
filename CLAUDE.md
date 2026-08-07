@@ -1,7 +1,6 @@
 ## Workflow
 
 - Do new work in a new git worktree (not directly on `main`) — create a branch and `git worktree add` before editing.
-- PRs into `main` require CI (test/typecheck/build) to pass before they can be merged.
 
 ## Agent skills
 
