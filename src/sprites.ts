@@ -45,8 +45,8 @@ export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> 
       (name) =>
         new Promise<[SpriteName, HTMLImageElement]>((resolve, reject) => {
           const image = new Image();
-          image.onload = () => resolve([name, image]);
-          image.onerror = () => reject(new Error(`Failed to load sprite: ${name}`));
+          image.onload = () => { resolve([name, image]); };
+          image.onerror = () => { reject(new Error(`Failed to load sprite: ${name}`)); };
           image.src = `/sprites/${name}.png`;
         }),
     ),

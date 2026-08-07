@@ -85,8 +85,11 @@ function drawObstacle(
   const tile = document.createElement('canvas');
   tile.width = PIXELS_PER_UNIT;
   tile.height = PIXELS_PER_UNIT;
-  tile.getContext('2d')!.drawImage(image, 0, 0, PIXELS_PER_UNIT, PIXELS_PER_UNIT);
-  const pattern = ctx.createPattern(tile, 'repeat')!;
+  const tileCtx = tile.getContext('2d');
+  if (!tileCtx) return;
+  tileCtx.drawImage(image, 0, 0, PIXELS_PER_UNIT, PIXELS_PER_UNIT);
+  const pattern = ctx.createPattern(tile, 'repeat');
+  if (!pattern) return;
 
   ctx.save();
   ctx.translate(screen.x - widthPx / 2, screen.y - heightPx / 2);
