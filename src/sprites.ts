@@ -27,6 +27,14 @@ const SPRITE_NAMES = [
   'ColourChangerGreenF1',
   'ColourChangerPurpleF1',
   'TeleporterClubF1',
+  'LineCapOrange',
+  'LineCapBlue',
+  'LineCapGreen',
+  'LineCapPurple',
+  'LineInnerOrange',
+  'LineInnerBlue',
+  'LineInnerGreen',
+  'LineInnerPurple',
 ] as const;
 
 export type SpriteName = (typeof SPRITE_NAMES)[number];
@@ -53,6 +61,14 @@ export function targetHitSprite(colour: Colour): SpriteName {
 
 export function colourChangerSprite(colour: Colour): SpriteName {
   return `ColourChanger${colour}F1` as SpriteName;
+}
+
+export function lineCapSprite(colour: Colour): SpriteName {
+  return `LineCap${colour}` as SpriteName;
+}
+
+export function lineInnerSprite(colour: Colour): SpriteName {
+  return `LineInner${colour}` as SpriteName;
 }
 
 export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> {

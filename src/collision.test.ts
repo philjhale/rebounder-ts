@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { circleVsBox, circleVsCircle, reflect } from './collision';
+import { circleVsBox, circleVsCircle, circleVsSegment, reflect } from './collision';
 
 describe('circleVsBox', () => {
   const box = { position: { x: 0, y: 0 }, width: 4, height: 2 };
@@ -52,6 +52,38 @@ describe('circleVsCircle', () => {
 
   it('returns null for circles that are just touching or apart', () => {
     expect(circleVsCircle({ x: 2, y: 0 }, 1, { x: 0, y: 0 }, 1)).toBeNull();
+  });
+});
+
+describe('circleVsSegment', () => {
+  const a = { x: -5, y: 0 };
+  const b = { x: 5, y: 0 };
+
+  it('returns null when the circle is far from the segment', () => {
+    expect(circleVsSegment({ x: 0, y: 10 }, 0.5, a, b, 0.25)).toBeNull();
+  });
+
+  it('detects a collision against the flat middle of the segment', () => {
+    // Circle centred just above the segment, overlapping by 0.1.
+    const collision = circleVsSegment({ x: 0, y: 0.65 }, 0.5, a, b, 0.25);
+    expect(collision).not.toBeNull();
+    expect(collision?.normal.x).toBeCloseTo(0);
+    expect(collision?.normal.y).toBeCloseTo(1);
+    expect(collision?.penetration).toBeCloseTo(0.1);
+  });
+
+  it('detects a collision against an endpoint cap, past the segment length', () => {
+    // Circle centred beyond b's end, closest point clamps to b.
+    const collision = circleVsSegment({ x: 5.5, y: 0.4 }, 0.5, a, b, 0.25);
+    expect(collision).not.toBeNull();
+    const distance = Math.hypot(0.5, 0.4);
+    expect(collision?.normal.x).toBeCloseTo(0.5 / distance);
+    expect(collision?.normal.y).toBeCloseTo(0.4 / distance);
+    expect(collision?.penetration).toBeCloseTo(0.75 - distance);
+  });
+
+  it('returns null for a circle just touching or apart from the segment', () => {
+    expect(circleVsSegment({ x: 0, y: 0.75 }, 0.5, a, b, 0.25)).toBeNull();
   });
 });
 

@@ -2,7 +2,8 @@ import './style.css';
 import { levels } from './levels';
 import { loadSprites } from './sprites';
 import { renderLevel, CANVAS_WIDTH, CANVAS_HEIGHT } from './render';
-import { createInitialState, updateGame, type GameState } from './simulation';
+import { attachPointerInput } from './input';
+import { createInitialState, updateGame, type GameState, type PointerInputEvent } from './simulation';
 import type { Level } from './types';
 
 function required<T>(value: T | null, message: string): T {
@@ -47,21 +48,30 @@ async function showLevel(level: Level) {
   );
   backButton.addEventListener('click', showPicker);
 
-  const canvas = required(app.querySelector('canvas'), 'canvas element not found');
+  const canvas = required(
+    app.querySelector<HTMLCanvasElement>('canvas'),
+    'canvas element not found',
+  );
   const ctx = required(canvas.getContext('2d'), 'could not get 2d context');
   const sprites = await loadSprites();
 
   let state: GameState = createInitialState(level);
   let stopped = false;
   let lastTime: number | null = null;
+  let pendingPointerEvents: PointerInputEvent[] = [];
+
+  const detachPointerInput = attachPointerInput(canvas, (event) => {
+    pendingPointerEvents.push(event);
+  });
 
   function tick(time: number) {
     if (stopped) return;
     const deltaTime = lastTime === null ? 0 : (time - lastTime) / 1000;
     lastTime = time;
 
-    state = updateGame(state, {}, deltaTime);
-    renderLevel(ctx, level, sprites, state.balls, state.targets);
+    state = updateGame(state, { pointerEvents: pendingPointerEvents }, deltaTime);
+    pendingPointerEvents = [];
+    renderLevel(ctx, level, sprites, state.balls, state.targets, state.lines);
 
     requestAnimationFrame(tick);
   }
@@ -69,6 +79,7 @@ async function showLevel(level: Level) {
   activeGameLoop = {
     stop: () => {
       stopped = true;
+      detachPointerInput();
     },
   };
   requestAnimationFrame(tick);
