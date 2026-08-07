@@ -46,7 +46,7 @@ describe('updateGame: launcher firing', () => {
     const next = updateGame(state, NO_INPUT, LAUNCHER_FIRE_INTERVAL);
 
     expect(next.balls).toHaveLength(1);
-    const ball = next.balls[0]!;
+    const ball = next.balls[0];
     expect(ball.colour).toBe('Blue');
     expect(ball.position).toEqual({ x: 2, y: 3 });
     // angle 0 fires straight up (+y) at constant BALL_SPEED
@@ -62,7 +62,7 @@ describe('updateGame: launcher firing', () => {
 
     const next = updateGame(state, NO_INPUT, LAUNCHER_FIRE_INTERVAL);
 
-    const ball = next.balls[0]!;
+    const ball = next.balls[0];
     // angle 90 fires along -x
     expect(ball.velocity.x).toBeCloseTo(-BALL_SPEED);
     expect(ball.velocity.y).toBeCloseTo(0);
@@ -102,7 +102,7 @@ describe('updateGame: ball movement', () => {
 
     state = updateGame(state, NO_INPUT, 1);
 
-    const ball = state.balls[0]!;
+    const ball = state.balls[0];
     expect(ball.position.x).toBeCloseTo(BALL_SPEED);
     expect(ball.position.y).toBeCloseTo(0);
     expect(Math.hypot(ball.velocity.x, ball.velocity.y)).toBeCloseTo(BALL_SPEED);
@@ -120,8 +120,8 @@ describe('updateGame: ball movement', () => {
       smallStepState = updateGame(smallStepState, NO_INPUT, 0.1);
     }
 
-    expect(smallStepState.balls[0]!.position.x).toBeCloseTo(bigStepState.balls[0]!.position.x);
-    expect(smallStepState.balls[0]!.position.y).toBeCloseTo(bigStepState.balls[0]!.position.y);
+    expect(smallStepState.balls[0].position.x).toBeCloseTo(bigStepState.balls[0].position.x);
+    expect(smallStepState.balls[0].position.y).toBeCloseTo(bigStepState.balls[0].position.y);
   });
 });
 
@@ -144,7 +144,7 @@ describe('updateGame: obstacle collision', () => {
 
     state = updateGame(state, NO_INPUT, 0.05);
 
-    const ball = state.balls[0]!;
+    const ball = state.balls[0];
     expect(ball.velocity.x).toBeLessThan(0);
     expect(Math.hypot(ball.velocity.x, ball.velocity.y)).toBeCloseTo(BALL_SPEED);
     // pushed back out of the obstacle, not left overlapping it
@@ -164,7 +164,7 @@ describe('updateGame: obstacle collision', () => {
 
     state = updateGame(state, NO_INPUT, 0.1);
 
-    const ball = state.balls[0]!;
+    const ball = state.balls[0];
     expect(ball.velocity.x).toBeCloseTo(BALL_SPEED);
   });
 });

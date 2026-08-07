@@ -51,9 +51,7 @@ function fireLaunchers(
 
   const launchers = state.level.launchers.map((launcherData, index) => {
     const runtime = state.launchers[index];
-    if (!runtime || !launcherData.enabled) {
-      return runtime ?? { timeUntilNextShot: LAUNCHER_FIRE_INTERVAL };
-    }
+    if (!launcherData.enabled) return runtime;
 
     let timeUntilNextShot = runtime.timeUntilNextShot - deltaTime;
     if (timeUntilNextShot <= 0) {
