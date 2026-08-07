@@ -1,10 +1,4 @@
-import type { Vec2 } from './types';
-
-export interface Box {
-  position: Vec2;
-  width: number;
-  height: number;
-}
+import type { ObstacleData, Vec2 } from './types';
 
 export interface Collision {
   normal: Vec2;
@@ -19,7 +13,7 @@ function clamp(value: number, min: number, max: number): number {
 // the box, otherwise the surface normal to push the circle out along and how
 // far to push it, measured from the box's nearest edge (or, when the
 // circle's centre is inside the box, from the nearest face).
-export function circleVsBox(centre: Vec2, radius: number, box: Box): Collision | null {
+export function circleVsBox(centre: Vec2, radius: number, box: ObstacleData): Collision | null {
   const halfWidth = box.width / 2;
   const halfHeight = box.height / 2;
   const dx = centre.x - box.position.x;
