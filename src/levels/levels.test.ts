@@ -5,7 +5,10 @@ import type { Colour } from '../types';
 const VALID_COLOURS: Colour[] = ['Orange', 'Blue', 'Green', 'Purple', 'None'];
 
 function expectVec2(value: unknown) {
-  expect(value).toMatchObject({ x: expect.any(Number), y: expect.any(Number) });
+  expect(value).toMatchObject({
+    x: expect.any(Number) as unknown,
+    y: expect.any(Number) as unknown,
+  });
 }
 
 describe('level data', () => {
