@@ -2,11 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
   BALL_RADIUS,
   BALL_SPEED,
+  COLOUR_CHANGER_RADIUS,
   LAUNCHER_FIRE_INTERVAL,
   LINE_FLICK_DELETE_SPEED,
   TARGET_DRAIN_INTERVAL,
   TARGET_HIT_THRESHOLD,
   TARGET_RADIUS,
+  TELEPORTER_EXIT_OFFSET,
+  TELEPORTER_RADIUS,
   activeLineColour,
   colourMatches,
   createInitialState,
@@ -277,6 +280,144 @@ describe('updateGame: obstacle collision', () => {
 
     const ball = state.balls[0];
     expect(ball.velocity.x).toBeCloseTo(BALL_SPEED);
+  });
+});
+
+describe('updateGame: teleporters', () => {
+  it('repositions a ball touching a Teleporter to its paired Teleporter, keeping its direction of travel', () => {
+    const level = makeLevel({
+      teleporters: [
+        { position: { x: 5, y: 0 }, pairId: 'A' },
+        { position: { x: -5, y: 0 }, pairId: 'A' },
+      ],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - TELEPORTER_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    const ball = state.balls[0];
+    // Placed at the paired Teleporter's location, nudged forward along the
+    // direction of travel by TELEPORTER_EXIT_OFFSET so it clears the
+    // Teleporter's own trigger radius and doesn't immediately teleport back.
+    expect(ball.position).toEqual({ x: -5 + TELEPORTER_EXIT_OFFSET, y: 0 });
+    expect(ball.velocity).toEqual({ x: BALL_SPEED, y: 0 });
+  });
+
+  it('does not immediately teleport the ball back after arriving at the paired Teleporter', () => {
+    const level = makeLevel({
+      teleporters: [
+        { position: { x: 5, y: 0 }, pairId: 'A' },
+        { position: { x: -5, y: 0 }, pairId: 'A' },
+      ],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - TELEPORTER_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+    expect(state.balls[0].position.x).toBeCloseTo(-5 + TELEPORTER_EXIT_OFFSET);
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    // A second step should carry on moving forward, not bounce back to +5.
+    expect(state.balls[0].position.x).toBeGreaterThan(-5 + TELEPORTER_EXIT_OFFSET);
+  });
+
+  it('leaves a ball untouched when it has not reached a Teleporter', () => {
+    const level = makeLevel({
+      teleporters: [
+        { position: { x: 5, y: 0 }, pairId: 'A' },
+        { position: { x: -5, y: 0 }, pairId: 'A' },
+      ],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [{ id: 0, position: { x: 0, y: 0 }, velocity: { x: BALL_SPEED, y: 0 }, colour: 'Orange' }],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    const ball = state.balls[0];
+    expect(ball.position.x).toBeCloseTo(0.05 * BALL_SPEED);
+  });
+});
+
+describe('updateGame: colour changers', () => {
+  it('recolours a ball touching a ColourChanger to the ColourChanger colour', () => {
+    const level = makeLevel({
+      colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - COLOUR_CHANGER_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    expect(state.balls[0].colour).toBe('Blue');
+  });
+
+  it('leaves a ball colour untouched when it has not reached a ColourChanger', () => {
+    const level = makeLevel({
+      colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [{ id: 0, position: { x: 0, y: 0 }, velocity: { x: BALL_SPEED, y: 0 }, colour: 'Orange' }],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    expect(state.balls[0].colour).toBe('Orange');
+  });
+
+  it('scores a recoloured ball against a target of its new colour', () => {
+    const level = makeLevel({
+      colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
+      targets: [{ position: { x: 5 + COLOUR_CHANGER_RADIUS + TARGET_RADIUS, y: 0 }, colour: 'Blue' }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - COLOUR_CHANGER_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    for (let i = 0; i < 50 && state.targets[0].hits === 0; i++) {
+      state = updateGame(state, NO_INPUT, 0.05);
+    }
+
+    expect(state.targets[0].hits).toBe(1);
   });
 });
 
