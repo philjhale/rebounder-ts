@@ -1,5 +1,5 @@
 import { circleVsBox, circleVsCircle, circleVsSegment, reflect, type Collision } from './collision';
-import type { Colour, Level, LineCounts, Vec2 } from './types';
+import type { Colour, Level, LineCounts, TeleporterData, Vec2 } from './types';
 
 export const BALL_SPEED = 7;
 export const BALL_RADIUS = 0.5;
@@ -7,6 +7,12 @@ export const LAUNCHER_FIRE_INTERVAL = 1.5;
 export const TARGET_RADIUS = 1;
 export const TARGET_HIT_THRESHOLD = 5;
 export const TARGET_DRAIN_INTERVAL = 2;
+export const TELEPORTER_RADIUS = 1;
+export const COLOUR_CHANGER_RADIUS = 1;
+// How far past the paired Teleporter's position a teleported Ball is placed,
+// along its direction of travel, so it doesn't immediately re-trigger the
+// same Teleporter pair (mirrors the original's Teleporter.cs offset).
+export const TELEPORTER_EXIT_OFFSET = 1.8;
 
 // Half the width of a drawn Line's collidable/drawable body.
 export const LINE_RADIUS = 0.25;
@@ -172,6 +178,12 @@ function resolveBounce(position: Vec2, velocity: Vec2, collision: Collision): Bo
   };
 }
 
+// Finds the other Teleporter sharing this one's pairId, if any.
+function findTeleporterPartner(teleporters: TeleporterData[], index: number): TeleporterData | null {
+  const { pairId } = teleporters[index];
+  return teleporters.find((teleporter, i) => i !== index && teleporter.pairId === pairId) ?? null;
+}
+
 interface BallStepResult {
   ball: Ball;
   hitTargetIndices: number[];
@@ -183,6 +195,7 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
     y: ball.position.y + ball.velocity.y * deltaTime,
   };
   let velocity = ball.velocity;
+  let colour = ball.colour;
 
   for (const obstacle of level.obstacles) {
     const collision = circleVsBox(position, BALL_RADIUS, obstacle);
@@ -204,6 +217,32 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
     ({ position, velocity } = bounce);
   }
 
+  // Teleporters and ColourChangers are pickups, not solid geometry: touching
+  // one triggers its effect without deflecting the Ball's velocity.
+  for (let i = 0; i < level.teleporters.length; i++) {
+    const teleporter = level.teleporters[i];
+    const collision = circleVsCircle(position, BALL_RADIUS, teleporter.position, TELEPORTER_RADIUS);
+    if (!collision) continue;
+
+    const partner = findTeleporterPartner(level.teleporters, i);
+    if (!partner) continue;
+
+    const direction = renormalize(velocity, 1);
+    position = {
+      x: partner.position.x + direction.x * TELEPORTER_EXIT_OFFSET,
+      y: partner.position.y + direction.y * TELEPORTER_EXIT_OFFSET,
+    };
+    break;
+  }
+
+  for (const colourChanger of level.colourChangers) {
+    const collision = circleVsCircle(position, BALL_RADIUS, colourChanger.position, COLOUR_CHANGER_RADIUS);
+    if (!collision) continue;
+
+    colour = colourChanger.colour;
+    break;
+  }
+
   const hitTargetIndices: number[] = [];
   level.targets.forEach((target, index) => {
     const collision = circleVsCircle(position, BALL_RADIUS, target.position, TARGET_RADIUS);
@@ -213,11 +252,11 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
     if (!bounce) return;
     ({ position, velocity } = bounce);
 
-    if (colourMatches(target.colour, ball.colour)) hitTargetIndices.push(index);
+    if (colourMatches(target.colour, colour)) hitTargetIndices.push(index);
   });
 
   return {
-    ball: { ...ball, position, velocity: renormalize(velocity, BALL_SPEED) },
+    ball: { ...ball, position, velocity: renormalize(velocity, BALL_SPEED), colour },
     hitTargetIndices,
   };
 }
