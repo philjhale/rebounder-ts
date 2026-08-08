@@ -4,6 +4,7 @@ import {
   BALL_SPEED,
   COLOUR_CHANGER_RADIUS,
   LAUNCHER_FIRE_INTERVAL,
+  LAUNCHER_LONG_PRESS_DURATION,
   LINE_FLICK_DELETE_SPEED,
   TARGET_DRAIN_INTERVAL,
   TARGET_HIT_THRESHOLD,
@@ -102,6 +103,109 @@ describe('updateGame: launcher firing', () => {
     }
 
     expect(state.balls).toHaveLength(2);
+  });
+});
+
+describe('updateGame: Launcher tap-toggle and long-press clear', () => {
+  it('a short tap on a Launcher toggles all Launchers off, so none fire', () => {
+    const level = makeLevel({
+      launchers: [
+        { position: { x: 0, y: 0 }, colour: 'Orange', enabled: true, angle: 0 },
+        { position: { x: 10, y: 10 }, colour: 'Blue', enabled: true, angle: 0 },
+      ],
+    });
+    let state = createInitialState(level);
+
+    // Tap: down and up at the Launcher's position within the same frame.
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'up', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.level.launchers.every((launcher) => !launcher.enabled)).toBe(true);
+
+    state = updateGame(state, NO_INPUT, LAUNCHER_FIRE_INTERVAL * 3);
+
+    expect(state.balls).toHaveLength(0);
+    expect(state.drag).toBeNull();
+  });
+
+  it('a second short tap toggles all Launchers back on', () => {
+    const level = makeLevel({
+      launchers: [{ position: { x: 0, y: 0 }, colour: 'Orange', enabled: true, angle: 0 }],
+    });
+    let state = createInitialState(level);
+
+    for (let i = 0; i < 2; i++) {
+      state = updateGame(
+        state,
+        withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+        0.016,
+      );
+      state = updateGame(
+        state,
+        withPointerEvents([{ type: 'up', pointerId: 1, position: { x: 0, y: 0 } }]),
+        0.016,
+      );
+    }
+
+    expect(state.level.launchers[0].enabled).toBe(true);
+
+    state = updateGame(state, NO_INPUT, LAUNCHER_FIRE_INTERVAL);
+
+    expect(state.balls).toHaveLength(1);
+  });
+
+  it('a long-press-and-release on a Launcher clears every in-flight Ball, without toggling Launchers', () => {
+    const level = makeLevel({
+      launchers: [{ position: { x: 0, y: 0 }, colour: 'Orange', enabled: true, angle: 0 }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        { id: 0, position: { x: 3, y: 3 }, velocity: { x: 1, y: 0 }, colour: 'Orange' },
+        { id: 1, position: { x: -3, y: -3 }, velocity: { x: 0, y: 1 }, colour: 'Orange' },
+      ],
+    };
+
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    // Hold well past the long-press threshold before releasing.
+    state = updateGame(state, NO_INPUT, LAUNCHER_LONG_PRESS_DURATION + 0.1);
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'up', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.balls).toHaveLength(0);
+    expect(state.level.launchers[0].enabled).toBe(true);
+  });
+
+  it('ignores a pointer-down away from any Launcher for tap-toggle purposes', () => {
+    const level = makeLevel({
+      launchers: [{ position: { x: 0, y: 0 }, colour: 'Orange', enabled: true, angle: 0 }],
+      lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 },
+    });
+    let state = createInitialState(level);
+
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 8, y: 8 } }]),
+      0.016,
+    );
+
+    expect(state.level.launchers[0].enabled).toBe(true);
+    expect(state.lines).toHaveLength(1);
   });
 });
 
