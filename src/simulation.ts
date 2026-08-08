@@ -1,5 +1,5 @@
 import { circleVsBox, circleVsCircle, circleVsSegment, reflect, type Collision } from './collision';
-import type { Colour, Level, LineCounts, TeleporterData, Vec2 } from './types';
+import type { Colour, Level, LauncherData, LineCounts, TeleporterData, Vec2 } from './types';
 
 export const BALL_SPEED = 7;
 export const BALL_RADIUS = 0.5;
@@ -26,6 +26,14 @@ export const LINE_FLICK_DELETE_SPEED = 15;
 // discarded rather than left behind as an invisible sliver still consuming
 // its Colour's LineCounts budget.
 export const LINE_MIN_LENGTH = 0.5;
+
+// How close a pointer-down must land to a Launcher to be treated as a tap
+// or long-press on it, rather than starting to draw/grab a Line. Matches
+// half the Launcher sprite's world size (see SPRITE_WORLD_SIZE.Launcher).
+export const LAUNCHER_HIT_RADIUS = 1.2;
+// How long a pointer must stay down on a Launcher to count as a long-press
+// (clear all in-flight Balls) rather than a tap (toggle all Launchers).
+export const LAUNCHER_LONG_PRESS_DURATION = 0.5;
 
 // Lines are always drawn in one of the four colours LineCounts budgets —
 // never 'None', which only applies to un-coloured Balls/Targets/Launchers.
@@ -74,6 +82,13 @@ export interface LineDragState {
   pointerVelocity: Vec2;
 }
 
+// Tracks a pointer currently held down on a Launcher, so its release can be
+// resolved as a tap (toggle) or a long-press (clear all in-flight Balls).
+export interface LauncherPressState {
+  pointerId: number;
+  heldTime: number;
+}
+
 export interface GameState {
   level: Level;
   balls: Ball[];
@@ -84,6 +99,7 @@ export interface GameState {
   nextBallId: number;
   nextLineId: number;
   drag: LineDragState | null;
+  launcherPress: LauncherPressState | null;
   levelComplete: boolean;
 }
 
@@ -107,6 +123,7 @@ export function createInitialState(level: Level): GameState {
     nextBallId: 0,
     nextLineId: 0,
     drag: null,
+    launcherPress: null,
     levelComplete: false,
   };
 }
@@ -324,8 +341,19 @@ function hitTestMiddle(lines: Line[], position: Vec2): number | null {
   return null;
 }
 
+// True if a pointer-down position landed within tap range of any Launcher.
+// Which Launcher doesn't matter — a tap/long-press always applies to all of
+// them — so this only needs to answer whether one was hit.
+function hitTestAnyLauncher(launchers: LauncherData[], position: Vec2): boolean {
+  return launchers.some((launcher) => distance(position, launcher.position) <= LAUNCHER_HIT_RADIUS);
+}
+
 function applyPointerDown(state: GameState, pointerId: number, position: Vec2): GameState {
-  if (state.drag) return state;
+  if (state.drag || state.launcherPress) return state;
+
+  if (hitTestAnyLauncher(state.level.launchers, position)) {
+    return { ...state, launcherPress: { pointerId, heldTime: 0 } };
+  }
 
   const handleHit = hitTestHandle(state.lines, position);
   if (handleHit) {
@@ -392,7 +420,23 @@ function applyPointerMove(state: GameState, pointerId: number, position: Vec2, d
   return { ...state, lines, drag };
 }
 
+// Resolves a released Launcher press: a short tap toggles all Launchers'
+// enabled state, while a long-press-and-release clears all in-flight Balls.
+function resolveLauncherPress(state: GameState, press: LauncherPressState): GameState {
+  if (press.heldTime >= LAUNCHER_LONG_PRESS_DURATION) {
+    return { ...state, balls: [], launcherPress: null };
+  }
+
+  const launchers = state.level.launchers.map((launcher) => ({ ...launcher, enabled: !launcher.enabled }));
+  return { ...state, level: { ...state.level, launchers }, launcherPress: null };
+}
+
 function applyPointerUp(state: GameState, pointerId: number, position: Vec2, deltaTime: number): GameState {
+  if (state.launcherPress) {
+    if (state.launcherPress.pointerId !== pointerId) return state;
+    return resolveLauncherPress(state, state.launcherPress);
+  }
+
   if (!state.drag || state.drag.pointerId !== pointerId) return state;
 
   const { lines, drag } = moveDraggedLine(state.drag, state.lines, position, deltaTime);
@@ -431,8 +475,16 @@ function applyPointerInput(state: GameState, input: PlayerInput, deltaTime: numb
   }, state);
 }
 
+// Accrues held-down time for an in-progress Launcher press, so a
+// pointer-up later in the same frame (or a subsequent frame) can tell a
+// tap from a long-press.
+function tickLauncherPress(state: GameState, deltaTime: number): GameState {
+  if (!state.launcherPress) return state;
+  return { ...state, launcherPress: { ...state.launcherPress, heldTime: state.launcherPress.heldTime + deltaTime } };
+}
+
 export function updateGame(state: GameState, input: PlayerInput, deltaTime: number): GameState {
-  const afterInput = applyPointerInput(state, input, deltaTime);
+  const afterInput = applyPointerInput(tickLauncherPress(state, deltaTime), input, deltaTime);
 
   const { balls: firedBalls, launchers, nextBallId } = fireLaunchers(afterInput, deltaTime);
 
@@ -453,6 +505,7 @@ export function updateGame(state: GameState, input: PlayerInput, deltaTime: numb
     nextBallId,
     nextLineId: afterInput.nextLineId,
     drag: afterInput.drag,
+    launcherPress: afterInput.launcherPress,
     levelComplete,
   };
 }
