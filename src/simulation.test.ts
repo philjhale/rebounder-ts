@@ -3,13 +3,16 @@ import {
   BALL_RADIUS,
   BALL_SPEED,
   LAUNCHER_FIRE_INTERVAL,
+  LINE_FLICK_DELETE_SPEED,
   TARGET_DRAIN_INTERVAL,
   TARGET_HIT_THRESHOLD,
   TARGET_RADIUS,
+  activeLineColour,
   colourMatches,
   createInitialState,
   updateGame,
   type GameState,
+  type PointerInputEvent,
 } from './simulation';
 import type { Level } from './types';
 
@@ -27,7 +30,7 @@ function makeLevel(overrides: Partial<Level> = {}): Level {
   };
 }
 
-const NO_INPUT = {};
+const NO_INPUT = { pointerEvents: [] };
 
 describe('updateGame: launcher firing', () => {
   it('does not fire before the interval elapses', () => {
@@ -274,5 +277,221 @@ describe('updateGame: obstacle collision', () => {
 
     const ball = state.balls[0];
     expect(ball.velocity.x).toBeCloseTo(BALL_SPEED);
+  });
+});
+
+function withPointerEvents(events: PointerInputEvent[]) {
+  return { pointerEvents: events };
+}
+
+describe('activeLineColour', () => {
+  it('picks the first colour (Orange, Blue, Green, Purple) with remaining budget', () => {
+    expect(activeLineColour({ Orange: 0, Blue: 2, Green: 1, Purple: 0 })).toBe('Blue');
+  });
+
+  it('falls back to Orange when no colour has remaining budget', () => {
+    expect(activeLineColour({ Orange: 0, Blue: 0, Green: 0, Purple: 0 })).toBe('Orange');
+  });
+});
+
+describe('updateGame: drawing Lines', () => {
+  it('draws a new Line in the active colour when dragging on empty space', () => {
+    const level = makeLevel({ lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.lines).toHaveLength(1);
+    expect(state.lines[0].colour).toBe('Orange');
+    expect(state.remainingLineCounts.Orange).toBe(0);
+  });
+
+  it('stretches the Line to follow the pointer while dragging', () => {
+    const level = makeLevel({ lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'move', pointerId: 1, position: { x: 5, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.lines[0].a).toEqual({ x: 0, y: 0 });
+    expect(state.lines[0].b).toEqual({ x: 5, y: 0 });
+  });
+
+  it('rejects drawing a new Line once the colour budget is exhausted', () => {
+    const level = makeLevel({ lineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.lines).toHaveLength(0);
+    expect(state.drag).toBeNull();
+  });
+});
+
+describe('updateGame: rotating and repositioning Lines', () => {
+  function makeStateWithLine(): GameState {
+    const level = makeLevel({ lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 } });
+    let state = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Orange', a: { x: -2, y: 0 }, b: { x: 2, y: 0 } }],
+      nextLineId: 1,
+    };
+    return state;
+  }
+
+  it('dragging a LineHandle rotates the Line around its other end', () => {
+    let state = makeStateWithLine();
+
+    // Grab the handle at b (2, 0) and move it, leaving a (-2, 0) fixed.
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 2, y: 0 } }]),
+      0.016,
+    );
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'move', pointerId: 1, position: { x: 0, y: 4 } }]),
+      0.016,
+    );
+
+    expect(state.lines[0].a).toEqual({ x: -2, y: 0 });
+    expect(state.lines[0].b).toEqual({ x: 0, y: 4 });
+  });
+
+  it('dragging the LineMiddle translates both endpoints without changing the angle', () => {
+    let state = makeStateWithLine();
+
+    // Grab the middle at the segment's centre (0, 0) and drag it.
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'move', pointerId: 1, position: { x: 1, y: 3 } }]),
+      0.016,
+    );
+
+    expect(state.lines[0].a).toEqual({ x: -1, y: 3 });
+    expect(state.lines[0].b).toEqual({ x: 3, y: 3 });
+  });
+});
+
+describe('updateGame: deleting Lines', () => {
+  it('deletes a flicked Line and refunds its LineCounts budget', () => {
+    const level = makeLevel({ lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Orange', a: { x: -2, y: 0 }, b: { x: 2, y: 0 } }],
+      remainingLineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 },
+      nextLineId: 1,
+    };
+
+    // Grab the middle, then release it moving far enough in one small
+    // deltaTime to exceed the flick-delete speed threshold.
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    const flickDistance = (LINE_FLICK_DELETE_SPEED + 5) * 0.016;
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'up', pointerId: 1, position: { x: flickDistance, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.lines).toHaveLength(0);
+    expect(state.remainingLineCounts.Orange).toBe(1);
+    expect(state.drag).toBeNull();
+  });
+
+  it('discards a Line released too short to be useful (e.g. a tap with no drag), refunding its budget', () => {
+    const level = makeLevel({ lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+
+    // A tap on empty space with no drag in between: down and up at the same position.
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'up', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.lines).toHaveLength(0);
+    expect(state.remainingLineCounts.Orange).toBe(1);
+  });
+
+  it('lets go of a slowly-released Line without deleting it', () => {
+    const level = makeLevel({ lineCounts: { Orange: 1, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Orange', a: { x: -2, y: 0 }, b: { x: 2, y: 0 } }],
+      remainingLineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 },
+      nextLineId: 1,
+    };
+
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'down', pointerId: 1, position: { x: 0, y: 0 } }]),
+      0.016,
+    );
+    state = updateGame(
+      state,
+      withPointerEvents([{ type: 'up', pointerId: 1, position: { x: 0.01, y: 0 } }]),
+      0.016,
+    );
+
+    expect(state.lines).toHaveLength(1);
+    expect(state.remainingLineCounts.Orange).toBe(0);
+  });
+});
+
+describe('updateGame: Balls vs Lines', () => {
+  it('bounces a Ball off a Line regardless of colour match, preserving speed', () => {
+    const level = makeLevel({ lineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Blue', a: { x: 5, y: -5 }, b: { x: 5, y: 5 } }],
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - 0.25 - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    const ball = state.balls[0];
+    expect(ball.velocity.x).toBeLessThan(0);
+    expect(Math.hypot(ball.velocity.x, ball.velocity.y)).toBeCloseTo(BALL_SPEED);
   });
 });

@@ -4,12 +4,21 @@ import {
   colourChangerSprite,
   launcherInnerSprite,
   launcherSprite,
+  lineCapSprite,
+  lineInnerSprite,
   targetHitSprite,
   targetSprite,
   type SpriteName,
 } from './sprites';
 import type { ObstacleData } from './types';
-import { BALL_RADIUS, TARGET_HIT_THRESHOLD, type Ball, type TargetRuntimeState } from './simulation';
+import {
+  BALL_RADIUS,
+  LINE_RADIUS,
+  TARGET_HIT_THRESHOLD,
+  type Ball,
+  type Line,
+  type TargetRuntimeState,
+} from './simulation';
 
 export const WORLD_WIDTH = 40;
 export const WORLD_HEIGHT = 36;
@@ -24,6 +33,15 @@ function worldToScreen(x: number, y: number): { x: number; y: number } {
   return {
     x: CANVAS_WIDTH / 2 + x * PIXELS_PER_UNIT,
     y: CANVAS_HEIGHT / 2 - y * PIXELS_PER_UNIT,
+  };
+}
+
+// Inverse of worldToScreen — used by the input adapter to convert a pointer
+// position (in canvas pixels) into world space.
+export function screenToWorld(screenX: number, screenY: number): Vec2 {
+  return {
+    x: (screenX - CANVAS_WIDTH / 2) / PIXELS_PER_UNIT,
+    y: -(screenY - CANVAS_HEIGHT / 2) / PIXELS_PER_UNIT,
   };
 }
 
@@ -158,17 +176,57 @@ function drawLauncher(
   if (inner) drawImageCentred(ctx, inner, worldX, worldY, scale);
 }
 
+// Draws a player-drawn Line as a stretched LineInner body between its
+// endpoints, capped at each end with a LineCap sprite — mirroring the
+// original's LineMiddle-stretch-plus-LineHandle-caps composition.
+function drawLine(ctx: CanvasRenderingContext2D, sprites: Map<SpriteName, HTMLImageElement>, line: Line) {
+  const capImage = sprites.get(lineCapSprite(line.colour));
+  const innerImage = sprites.get(lineInnerSprite(line.colour));
+  if (!capImage || !innerImage) return;
+
+  const screenA = worldToScreen(line.a.x, line.a.y);
+  const screenB = worldToScreen(line.b.x, line.b.y);
+  const dx = screenB.x - screenA.x;
+  const dy = screenB.y - screenA.y;
+  const lengthPx = Math.hypot(dx, dy);
+  const angle = Math.atan2(dy, dx);
+  const thicknessPx = LINE_RADIUS * 2 * PIXELS_PER_UNIT;
+  const midX = (screenA.x + screenB.x) / 2;
+  const midY = (screenA.y + screenB.y) / 2;
+
+  if (lengthPx > 0) {
+    ctx.save();
+    ctx.translate(midX, midY);
+    ctx.rotate(angle);
+    ctx.drawImage(innerImage, -lengthPx / 2, -thicknessPx / 2, lengthPx, thicknessPx);
+    ctx.restore();
+  }
+
+  for (const point of [screenA, screenB]) {
+    ctx.save();
+    ctx.translate(point.x, point.y);
+    ctx.rotate(angle);
+    ctx.drawImage(capImage, -thicknessPx / 2, -thicknessPx / 2, thicknessPx, thicknessPx);
+    ctx.restore();
+  }
+}
+
 export function renderLevel(
   ctx: CanvasRenderingContext2D,
   level: Level,
   sprites: Map<SpriteName, HTMLImageElement>,
   balls: Ball[] = [],
   targets: TargetRuntimeState[] = [],
+  lines: Line[] = [],
 ) {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
   for (const obstacle of level.obstacles) {
     drawObstacle(ctx, sprites, obstacle);
+  }
+
+  for (const line of lines) {
+    drawLine(ctx, sprites, line);
   }
 
   for (const teleporter of level.teleporters) {

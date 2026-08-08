@@ -71,6 +71,44 @@ export function circleVsCircle(
   };
 }
 
+// Circle vs a capsule-like line segment (a segment with its own radius, e.g.
+// a Line's drawable width). Returns null when the circle doesn't overlap the
+// capsule, otherwise the normal pointing from the segment's nearest point
+// towards the circle's centre, and how far to push the circle out along it.
+export function circleVsSegment(
+  centre: Vec2,
+  radius: number,
+  a: Vec2,
+  b: Vec2,
+  segmentRadius: number,
+): Collision | null {
+  const abx = b.x - a.x;
+  const aby = b.y - a.y;
+  const lengthSquared = abx * abx + aby * aby;
+
+  let t = 0;
+  if (lengthSquared > 0) {
+    t = clamp(((centre.x - a.x) * abx + (centre.y - a.y) * aby) / lengthSquared, 0, 1);
+  }
+
+  const closestX = a.x + abx * t;
+  const closestY = a.y + aby * t;
+  const diffX = centre.x - closestX;
+  const diffY = centre.y - closestY;
+  const distanceSquared = diffX * diffX + diffY * diffY;
+  const combinedRadius = radius + segmentRadius;
+
+  if (distanceSquared >= combinedRadius * combinedRadius) return null;
+
+  if (distanceSquared === 0) return { normal: { x: 0, y: 1 }, penetration: combinedRadius };
+
+  const distance = Math.sqrt(distanceSquared);
+  return {
+    normal: { x: diffX / distance, y: diffY / distance },
+    penetration: combinedRadius - distance,
+  };
+}
+
 // Reflects velocity across a surface normal, matching physical bounce
 // (mirrors incoming direction, preserves speed).
 export function reflect(velocity: Vec2, normal: Vec2): Vec2 {
