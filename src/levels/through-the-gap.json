@@ -1,10 +1,10 @@
 {
-  "id": "first-coloured-line",
-  "name": "FirstColouredLine",
+  "id": "through-the-gap",
+  "name": "ThroughTheGap",
   "launchers": [
     {
       "position": {
-        "x": -5,
+        "x": -12,
         "y": -9
       },
       "colour": "Blue",
@@ -13,19 +13,10 @@
     },
     {
       "position": {
-        "x": 0,
+        "x": -8,
         "y": -9
       },
       "colour": "Green",
-      "enabled": true,
-      "angle": 0
-    },
-    {
-      "position": {
-        "x": 5,
-        "y": -9
-      },
-      "colour": "Purple",
       "enabled": true,
       "angle": 0
     }
@@ -33,33 +24,45 @@
   "targets": [
     {
       "position": {
-        "x": 17,
-        "y": 3
-      },
-      "colour": "Green"
-    },
-    {
-      "position": {
-        "x": 17,
-        "y": -3
-      },
-      "colour": "Purple"
-    },
-    {
-      "position": {
-        "x": -17,
-        "y": 0
+        "x": 12,
+        "y": -9.25
       },
       "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 8,
+        "y": -9.25
+      },
+      "colour": "Green"
     }
   ],
-  "obstacles": [],
+  "obstacles": [
+    {
+      "position": {
+        "x": 0,
+        "y": 6
+      },
+      "width": 12,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -6.5
+      },
+      "width": 12,
+      "height": 9,
+      "angle": 0
+    }
+  ],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 3,
-    "Blue": 0,
-    "Green": 0,
+    "Orange": 0,
+    "Blue": 2,
+    "Green": 2,
     "Purple": 0
   }
 }

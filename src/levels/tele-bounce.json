@@ -1,22 +1,22 @@
 {
-  "id": "first-teleporter",
-  "name": "FirstTeleporter",
+  "id": "tele-bounce",
+  "name": "TeleBounce",
   "launchers": [
     {
       "position": {
-        "x": -9,
-        "y": -9
+        "x": 4.82464218,
+        "y": 5.32203245
       },
       "colour": "Orange",
       "enabled": true,
-      "angle": 0
+      "angle": -135
     }
   ],
   "targets": [
     {
       "position": {
-        "x": 14,
-        "y": 2
+        "x": 17,
+        "y": 4
       },
       "colour": "Orange"
     }
@@ -28,7 +28,16 @@
         "y": 0
       },
       "width": 1,
-      "height": 31.25,
+      "height": 32,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 4,
+        "y": 1.5
+      },
+      "width": 7,
+      "height": 1,
       "angle": 0
     }
   ],
@@ -36,14 +45,14 @@
     {
       "position": {
         "x": 3,
-        "y": 2
+        "y": -1
       },
       "pairId": "1075075527|238982469"
     },
     {
       "position": {
         "x": -3,
-        "y": 2
+        "y": -1
       },
       "pairId": "1075075527|238982469"
     }

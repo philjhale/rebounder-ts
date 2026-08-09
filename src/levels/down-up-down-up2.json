@@ -1,22 +1,22 @@
 {
-  "id": "scene1",
-  "name": "Scene1",
+  "id": "down-up-down-up2",
+  "name": "DownUpDownUp2",
   "launchers": [
     {
       "position": {
-        "x": -9,
-        "y": -9
+        "x": -14,
+        "y": 4
       },
       "colour": "Orange",
       "enabled": true,
-      "angle": 0
+      "angle": -90
     }
   ],
   "targets": [
     {
       "position": {
-        "x": 17,
-        "y": 0
+        "x": 13.75,
+        "y": 4
       },
       "colour": "Orange"
     }
@@ -25,7 +25,7 @@
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 1,
+    "Orange": 3,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

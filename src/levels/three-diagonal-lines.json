@@ -1,0 +1,68 @@
+{
+  "id": "three-diagonal-lines",
+  "name": "ThreeDiagonalLines",
+  "launchers": [
+    {
+      "position": {
+        "x": 0,
+        "y": 9
+      },
+      "colour": "Green",
+      "enabled": true,
+      "angle": 180
+    },
+    {
+      "position": {
+        "x": 10,
+        "y": 9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -180
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 0,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": -7,
+        "y": -9.25
+      },
+      "colour": "Green"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": -5,
+        "y": -6
+      },
+      "width": 1,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": -6
+      },
+      "width": 1,
+      "height": 8,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 1,
+    "Green": 1,
+    "Purple": 0
+  }
+}

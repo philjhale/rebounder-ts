@@ -1,0 +1,113 @@
+{
+  "id": "splits",
+  "name": "Splits",
+  "launchers": [
+    {
+      "position": {
+        "x": 9.25,
+        "y": -8.20783424
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": 9.25,
+        "y": -8.20783424
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 45
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -2,
+        "y": 9.25
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 2,
+        "y": 9.25
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 6
+      },
+      "width": 1,
+      "height": 8,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 4,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "two-gaps",
+  "name": "TwoGaps",
+  "launchers": [
+    {
+      "position": {
+        "x": -9,
+        "y": -9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": 0
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -4,
+        "y": -9.25
+      },
+      "colour": "Green"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 0,
+        "y": -8
+      },
+      "width": 1,
+      "height": 6,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 8
+      },
+      "width": 1,
+      "height": 6,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 2,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [
+    {
+      "position": {
+        "x": -0.25,
+        "y": -5
+      },
+      "colour": "Green"
+    },
+    {
+      "position": {
+        "x": -0.25,
+        "y": 1
+      },
+      "colour": "Blue"
+    }
+  ],
+  "lineCounts": {
+    "Orange": 2,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

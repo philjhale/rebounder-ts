@@ -1,50 +1,46 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "back-door2",
+  "name": "BackDoor2",
   "launchers": [
     {
       "position": {
-        "x": 14,
-        "y": 0
+        "x": -14,
+        "y": -5
       },
       "colour": "Orange",
       "enabled": true,
-      "angle": 90
+      "angle": -90
     }
   ],
   "targets": [
     {
       "position": {
-        "x": -13.75,
-        "y": 3.00000024
+        "x": -14,
+        "y": 5
       },
       "colour": "Orange"
     }
   ],
-  "obstacles": [
+  "obstacles": [],
+  "teleporters": [
     {
       "position": {
-        "x": -5,
-        "y": -6
+        "x": 2,
+        "y": 5
       },
-      "width": 1,
-      "height": 8,
-      "angle": 0
+      "pairId": "1071345287|1501545745"
     },
     {
       "position": {
-        "x": 0,
-        "y": 3
+        "x": 2,
+        "y": -5
       },
-      "width": 1,
-      "height": 14,
-      "angle": 0
+      "pairId": "1071345287|1501545745"
     }
   ],
-  "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 2,
+    "Orange": 1,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

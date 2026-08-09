@@ -1,50 +1,57 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "down-and-around",
+  "name": "DownAndAround",
   "launchers": [
     {
       "position": {
         "x": 14,
-        "y": 0
+        "y": 3
       },
       "colour": "Orange",
       "enabled": true,
       "angle": 90
+    },
+    {
+      "position": {
+        "x": -14,
+        "y": 2
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -90
     }
   ],
   "targets": [
     {
       "position": {
-        "x": -13.75,
-        "y": 3.00000024
+        "x": -1,
+        "y": -9.25
       },
       "colour": "Orange"
+    },
+    {
+      "position": {
+        "x": -6,
+        "y": -9.25
+      },
+      "colour": "Blue"
     }
   ],
   "obstacles": [
     {
       "position": {
-        "x": -5,
-        "y": -6
+        "x": -4.74638557,
+        "y": -3
       },
-      "width": 1,
-      "height": 8,
-      "angle": 0
-    },
-    {
-      "position": {
-        "x": 0,
-        "y": 3
-      },
-      "width": 1,
-      "height": 14,
+      "width": 26,
+      "height": 1,
       "angle": 0
     }
   ],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 2,
+    "Orange": 4,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

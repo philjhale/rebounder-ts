@@ -1,0 +1,106 @@
+{
+  "id": "level-columns",
+  "name": "LevelColumns",
+  "launchers": [
+    {
+      "position": {
+        "x": -11,
+        "y": -9
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 0
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 13.75,
+        "y": -5
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 20,
+        "y": 8
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 8
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 15,
+        "y": -5
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 15,
+        "y": 8
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 10,
+        "y": 8
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": -5
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 20,
+        "y": -5
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 10,
+        "y": -5
+      },
+      "width": 3,
+      "height": 8,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

@@ -23,6 +23,9 @@ export interface ObstacleData {
   position: Vec2;
   width: number;
   height: number;
+  // Degrees, matching LauncherData.angle's convention: 0 is unrotated/axis-
+  // aligned, clockwise-positive.
+  angle: number;
 }
 
 export interface TeleporterData {

@@ -1,0 +1,49 @@
+{
+  "id": "cross-over",
+  "name": "CrossOver",
+  "launchers": [
+    {
+      "position": {
+        "x": -14,
+        "y": -4
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -90
+    },
+    {
+      "position": {
+        "x": -14,
+        "y": 4
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": -90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 14,
+        "y": 4
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 14,
+        "y": -4
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 3,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

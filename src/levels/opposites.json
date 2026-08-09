@@ -1,0 +1,68 @@
+{
+  "id": "opposites",
+  "name": "Opposites",
+  "launchers": [
+    {
+      "position": {
+        "x": -14,
+        "y": 0.5
+      },
+      "colour": "Green",
+      "enabled": true,
+      "angle": -90
+    },
+    {
+      "position": {
+        "x": 14.000001,
+        "y": -0.5
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": 90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 7,
+        "y": 9.25
+      },
+      "colour": "Green"
+    },
+    {
+      "position": {
+        "x": -4,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 15,
+        "y": -6.5
+      },
+      "width": 32,
+      "height": 7,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -12,
+        "y": 6.5
+      },
+      "width": 32,
+      "height": 7,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 0,
+    "Blue": 1,
+    "Green": 1,
+    "Purple": 0
+  }
+}

@@ -1,10 +1,10 @@
 {
-  "id": "scene1",
-  "name": "Scene1",
+  "id": "horizontal-colour-tunnel",
+  "name": "HorizontalColourTunnel",
   "launchers": [
     {
       "position": {
-        "x": -9,
+        "x": -12,
         "y": -9
       },
       "colour": "Orange",
@@ -15,7 +15,7 @@
   "targets": [
     {
       "position": {
-        "x": 17,
+        "x": 14,
         "y": 0
       },
       "colour": "Orange"
@@ -23,7 +23,22 @@
   ],
   "obstacles": [],
   "teleporters": [],
-  "colourChangers": [],
+  "colourChangers": [
+    {
+      "position": {
+        "x": 6,
+        "y": 2
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 6,
+        "y": -2
+      },
+      "colour": "Blue"
+    }
+  ],
   "lineCounts": {
     "Orange": 1,
     "Blue": 0,

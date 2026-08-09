@@ -1,6 +1,6 @@
 {
-  "id": "first-teleporter",
-  "name": "FirstTeleporter",
+  "id": "awkward-angle",
+  "name": "AwkwardAngle",
   "launchers": [
     {
       "position": {
@@ -15,8 +15,8 @@
   "targets": [
     {
       "position": {
-        "x": 14,
-        "y": 2
+        "x": 1.25,
+        "y": -3.00000024
       },
       "colour": "Orange"
     }
@@ -28,24 +28,42 @@
         "y": 0
       },
       "width": 1,
-      "height": 31.25,
+      "height": 25,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -8.5,
+        "y": 0
+      },
+      "width": 1,
+      "height": 3,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -14,
+        "y": 0
+      },
+      "width": 10,
+      "height": 1,
       "angle": 0
     }
   ],
   "teleporters": [
     {
       "position": {
-        "x": 3,
-        "y": 2
+        "x": -12,
+        "y": 4
       },
-      "pairId": "1075075527|238982469"
+      "pairId": "1500153793|1589520149"
     },
     {
       "position": {
-        "x": -3,
-        "y": 2
+        "x": 8,
+        "y": -3
       },
-      "pairId": "1075075527|238982469"
+      "pairId": "1500153793|1589520149"
     }
   ],
   "colourChangers": [],

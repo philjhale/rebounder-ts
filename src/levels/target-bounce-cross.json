@@ -1,10 +1,19 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "target-bounce-cross",
+  "name": "TargetBounceCross",
   "launchers": [
     {
       "position": {
-        "x": 14,
+        "x": 0,
+        "y": 9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -180
+    },
+    {
+      "position": {
+        "x": 12,
         "y": 0
       },
       "colour": "Orange",
@@ -15,36 +24,24 @@
   "targets": [
     {
       "position": {
-        "x": -13.75,
-        "y": 3.00000024
+        "x": -14,
+        "y": 0
       },
       "colour": "Orange"
-    }
-  ],
-  "obstacles": [
-    {
-      "position": {
-        "x": -5,
-        "y": -6
-      },
-      "width": 1,
-      "height": 8,
-      "angle": 0
     },
     {
       "position": {
         "x": 0,
-        "y": 3
+        "y": -9.25
       },
-      "width": 1,
-      "height": 14,
-      "angle": 0
+      "colour": "Blue"
     }
   ],
+  "obstacles": [],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 2,
+    "Orange": 1,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

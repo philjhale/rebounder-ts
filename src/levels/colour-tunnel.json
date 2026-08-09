@@ -1,0 +1,64 @@
+{
+  "id": "colour-tunnel",
+  "name": "ColourTunnel",
+  "launchers": [
+    {
+      "position": {
+        "x": 12,
+        "y": -0.25
+      },
+      "colour": "Green",
+      "enabled": true,
+      "angle": 90
+    },
+    {
+      "position": {
+        "x": -12,
+        "y": 0.25
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 0,
+        "y": 9.25
+      },
+      "colour": "Green"
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [],
+  "teleporters": [],
+  "colourChangers": [
+    {
+      "position": {
+        "x": -3,
+        "y": -11
+      },
+      "colour": "Green"
+    },
+    {
+      "position": {
+        "x": 2.5,
+        "y": -11
+      },
+      "colour": "Blue"
+    }
+  ],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

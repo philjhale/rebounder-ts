@@ -1,0 +1,88 @@
+{
+  "id": "fill-in-the-blanks",
+  "name": "FillInTheBlanks",
+  "launchers": [
+    {
+      "position": {
+        "x": 14,
+        "y": 5
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -13.75,
+        "y": -6
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 0,
+        "y": -4
+      },
+      "width": 1,
+      "height": 6,
+      "angle": 45
+    },
+    {
+      "position": {
+        "x": 7,
+        "y": -4
+      },
+      "width": 1,
+      "height": 6,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": -3,
+        "y": -7
+      },
+      "width": 1,
+      "height": 6,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -6,
+        "y": 4
+      },
+      "width": 1,
+      "height": 6,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": 2,
+        "y": 4
+      },
+      "width": 1,
+      "height": 6,
+      "angle": 45
+    },
+    {
+      "position": {
+        "x": -14,
+        "y": -3
+      },
+      "width": 10,
+      "height": 1,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 2,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

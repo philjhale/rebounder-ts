@@ -1,0 +1,131 @@
+{
+  "id": "three-vertical-coloured-lines",
+  "name": "ThreeVerticalColouredLines",
+  "launchers": [
+    {
+      "position": {
+        "x": -2.26083565,
+        "y": 8.21461678
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": 135
+    },
+    {
+      "position": {
+        "x": 2.2806437,
+        "y": 8.22451591
+      },
+      "colour": "Green",
+      "enabled": true,
+      "angle": -135
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 0.75,
+        "y": -8
+      },
+      "colour": "Green"
+    },
+    {
+      "position": {
+        "x": -0.75,
+        "y": -8
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -13,
+        "y": 0
+      },
+      "width": 10,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -6
+      },
+      "width": 8,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 13,
+        "y": 0
+      },
+      "width": 10,
+      "height": 1,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 1,
+    "Green": 1,
+    "Purple": 0
+  }
+}

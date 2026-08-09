@@ -1,19 +1,19 @@
 {
-  "id": "first-coloured-line",
-  "name": "FirstColouredLine",
+  "id": "three-shooters-up",
+  "name": "ThreeShootersUp",
   "launchers": [
     {
       "position": {
-        "x": -5,
+        "x": -6,
         "y": -9
       },
-      "colour": "Blue",
+      "colour": "Orange",
       "enabled": true,
       "angle": 0
     },
     {
       "position": {
-        "x": 0,
+        "x": 10,
         "y": -9
       },
       "colour": "Green",
@@ -22,10 +22,10 @@
     },
     {
       "position": {
-        "x": 5,
+        "x": 2,
         "y": -9
       },
-      "colour": "Purple",
+      "colour": "Blue",
       "enabled": true,
       "angle": 0
     }
@@ -33,33 +33,33 @@
   "targets": [
     {
       "position": {
-        "x": 17,
-        "y": 3
+        "x": -10,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": -2,
+        "y": -9.25
       },
       "colour": "Green"
     },
     {
       "position": {
-        "x": 17,
-        "y": -3
+        "x": 6,
+        "y": -9.25
       },
-      "colour": "Purple"
-    },
-    {
-      "position": {
-        "x": -17,
-        "y": 0
-      },
-      "colour": "Blue"
+      "colour": "Orange"
     }
   ],
   "obstacles": [],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 3,
-    "Blue": 0,
-    "Green": 0,
+    "Orange": 2,
+    "Blue": 2,
+    "Green": 2,
     "Purple": 0
   }
 }

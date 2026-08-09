@@ -1,6 +1,6 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "scene4",
+  "name": "Scene4",
   "launchers": [
     {
       "position": {
@@ -15,8 +15,8 @@
   "targets": [
     {
       "position": {
-        "x": -13.75,
-        "y": 3.00000024
+        "x": -2.25,
+        "y": 0
       },
       "colour": "Orange"
     }
@@ -24,8 +24,17 @@
   "obstacles": [
     {
       "position": {
-        "x": -5,
-        "y": -6
+        "x": -4.5,
+        "y": 3.5
+      },
+      "width": 6,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -1,
+        "y": 0
       },
       "width": 1,
       "height": 8,
@@ -33,18 +42,18 @@
     },
     {
       "position": {
-        "x": 0,
-        "y": 3
+        "x": -4.5,
+        "y": -3.5
       },
-      "width": 1,
-      "height": 14,
+      "width": 6,
+      "height": 1,
       "angle": 0
     }
   ],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 2,
+    "Orange": 3,
     "Blue": 0,
     "Green": 0,
     "Purple": 0
