@@ -1,0 +1,7 @@
+# Convert all Unity scenes via a one-off script, replacing the hand-authored levels
+
+ADR 0003 deferred the Unity-scene converter, hand-authoring 5 levels instead, because the level JSON format wasn't proven yet. It's now exercised by a working prototype/simulation and stable enough to convert against. This decision builds that converter: `scripts/convert-levels.ts`, kept in the repo but not wired into the build (it runs once, its output is committed, same treatment as any other one-off migration). It hand-rolls a parser for Unity's `.unity` YAML rather than depending on a general-purpose Unity-YAML library — the format actually in use is narrow (four tags: `Shooter`/`Obstacle`/`MainCamera`/`Background`; everything else identified by script GUID or component presence), so a full-fidelity parser would be solving a bigger problem than this project has.
+
+The converter replaces all 5 ADR-0003 hand-authored levels outright — one source of truth for level data, not two — and fails loudly (throws, stops the run) on any scene it can't fully parse, rather than emitting a partial or best-effort level. For the 8 levels that ship multiple aspect-ratio scenes, it converts a single chosen variant; picking which, and any responsive/multi-aspect handling, is deferred (see `ROADMAP.md`). It also adds `angle: number` to `ObstacleData` to represent the 28 rotated-obstacle instances found across 8 scenes — the schema change only; consuming that field in rendering/collision is ADR 0009.
+
+Full design: [issue #30](https://github.com/philjhale/rebounder-ts/issues/30).
