@@ -1,9 +1,10 @@
 import './style.css';
-import { levels } from './levels';
 import { loadSprites } from './sprites';
 import { renderLevel, CANVAS_WIDTH, CANVAS_HEIGHT } from './render';
 import { attachPointerInput } from './input';
 import { createInitialState, updateGame, type GameState, type PointerInputEvent } from './simulation';
+import { completeLevel } from './progression';
+import { renderLevelPicker } from './levelPicker';
 import type { Level } from './types';
 
 function required<T>(value: T | null, message: string): T {
@@ -19,24 +20,12 @@ function showPicker() {
   activeGameLoop?.stop();
   activeGameLoop = null;
 
-  app.innerHTML = `
-    <h1>Rebounder</h1>
-    <ul class="level-picker">
-      ${levels
-        .map((level) => `<li><button data-level-id="${level.id}">${level.name}</button></li>`)
-        .join('')}
-    </ul>
-  `;
-
-  app.querySelectorAll<HTMLButtonElement>('button[data-level-id]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const level = levels.find((l) => l.id === button.dataset.levelId);
-      if (level) void showLevel(level);
-    });
+  renderLevelPicker(app, {
+    onSelectLevel: (level, index) => void showLevel(level, index),
   });
 }
 
-async function showLevel(level: Level) {
+async function showLevel(level: Level, index: number) {
   app.innerHTML = `
     <button class="back-button">&larr; Levels</button>
     <canvas width="${String(CANVAS_WIDTH)}" height="${String(CANVAS_HEIGHT)}"></canvas>
@@ -64,11 +53,14 @@ async function showLevel(level: Level) {
     pendingPointerEvents.push(event);
   });
 
+  let completionRecorded = false;
+
   function tick(time: number) {
     if (stopped) return;
     const deltaTime = lastTime === null ? 0 : (time - lastTime) / 1000;
     lastTime = time;
 
+    const wasComplete = state.levelComplete;
     state = updateGame(state, { pointerEvents: pendingPointerEvents }, deltaTime);
     pendingPointerEvents = [];
     // `time` is the rAF-supplied DOMHighResTimeStamp (ms since page load) —
@@ -77,6 +69,15 @@ async function showLevel(level: Level) {
     // and doesn't need to reset with level/game state (see animatedSpriteName
     // in sprites.ts).
     renderLevel(ctx, level, sprites, state.balls, state.targets, state.lines, time / 1000);
+
+    // Record progress once, on the transition into completion, so the
+    // picker (issue #44) reflects the newly-unlocked level on return. #45
+    // (menu flow) owns any "level complete" screen/transition — this just
+    // persists the gating pointer via #41's save API.
+    if (!wasComplete && state.levelComplete && !completionRecorded) {
+      completionRecorded = true;
+      completeLevel(index);
+    }
 
     requestAnimationFrame(tick);
   }

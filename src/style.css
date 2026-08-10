@@ -14,6 +14,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .level-picker button,
@@ -21,6 +23,28 @@ body {
   font-size: 1rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
+}
+
+.level-picker__entry--done .level-picker__button {
+  background: #2f5c3a;
+  color: #eee;
+  border-color: #3f7a4d;
+}
+
+.level-picker__entry--current .level-picker__button {
+  background: #3a4f8f;
+  color: #fff;
+  border-color: #5c78d6;
+  font-weight: bold;
+}
+
+.level-picker__entry--locked .level-picker__label {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  color: #666;
+  background: #262626;
+  border: 1px solid #333;
+  border-radius: 4px;
 }
 
 canvas {
