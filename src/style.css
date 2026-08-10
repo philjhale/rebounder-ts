@@ -71,6 +71,47 @@ canvas {
   position: relative;
 }
 
+.hud {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem;
+  pointer-events: none;
+}
+
+.hud__remaining {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hud__remaining-icon {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+}
+
+.hud__remaining-slot--empty .hud__remaining-icon {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.hud__pause-button {
+  pointer-events: auto;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.hud__pause-button img {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+}
+
 .overlay {
   position: absolute;
   inset: 0;

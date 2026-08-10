@@ -35,6 +35,11 @@ const SPRITE_NAMES = [
   'LineInnerBlue',
   'LineInnerGreen',
   'LineInnerPurple',
+  'GUI_Pause',
+  'GUI_RemainOrange',
+  'GUI_RemainBlue',
+  'GUI_RemainGreen',
+  'GUI_RemainPurple',
 ] as const;
 
 export type SpriteName = (typeof SPRITE_NAMES)[number];
@@ -95,6 +100,14 @@ export function lineInnerSprite(colour: Colour): SpriteName {
   return `LineInner${colour}` as SpriteName;
 }
 
+export function remainingLinesSprite(colour: Colour): SpriteName {
+  return `GUI_Remain${colour}` as SpriteName;
+}
+
+export function spritePath(name: SpriteName): string {
+  return `/sprites/${name}.png`;
+}
+
 export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> {
   const entries = await Promise.all(
     SPRITE_NAMES.map(
@@ -103,7 +116,7 @@ export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> 
           const image = new Image();
           image.onload = () => { resolve([name, image]); };
           image.onerror = () => { reject(new Error(`Failed to load sprite: ${name}`)); };
-          image.src = `/sprites/${name}.png`;
+          image.src = spritePath(name);
         }),
     ),
   );

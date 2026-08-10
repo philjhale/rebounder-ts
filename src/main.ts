@@ -5,6 +5,7 @@ import { attachPointerInput } from './input';
 import { createInitialState, updateGame, type GameState, type PointerInputEvent } from './simulation';
 import { completeLevel } from './progression';
 import { renderLevelPicker } from './levelPicker';
+import { renderHud } from './hud';
 import {
   renderTitleScreen,
   renderHowToPlayScreen,
@@ -72,6 +73,7 @@ async function showLevel(index: number): Promise<void> {
     <div class="level-screen">
       <button type="button" class="back-button">&larr; Levels</button>
       <canvas width="${String(CANVAS_WIDTH)}" height="${String(CANVAS_HEIGHT)}"></canvas>
+      <div class="hud" data-testid="hud"></div>
       <div class="overlay overlay--hidden" data-testid="pause-overlay">
         <div class="overlay__panel">
           <h2>Paused</h2>
@@ -174,6 +176,12 @@ async function showLevel(index: number): Promise<void> {
   });
   requireAction(completeOverlay, 'back-to-levels').addEventListener('click', () => { goTo({ name: 'picker' }); });
 
+  const hudContainer = required(
+    app.querySelector<HTMLDivElement>('[data-testid="hud"]'),
+    'hud element not found',
+  );
+  const hud = renderHud(hudContainer, { onPause: openPause });
+
   function tick(time: number) {
     if (stopped) return;
 
@@ -190,6 +198,7 @@ async function showLevel(index: number): Promise<void> {
       // and doesn't need to reset with level/game state (see animatedSpriteName
       // in sprites.ts).
       renderLevel(ctx, level, sprites, state.balls, state.targets, state.lines, time / 1000);
+      hud.update(state.remainingLineCounts);
 
       // Record progress once, on the transition into completion, and show
       // the Level Complete overlay (the canvas stays mounted underneath it).
