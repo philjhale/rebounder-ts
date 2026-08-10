@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { circleVsBox, circleVsCircle, circleVsSegment, reflect } from './collision';
+import { circleVsBox, circleVsCircle, circleVsObstacle, circleVsSegment, reflect } from './collision';
+import { rotatePoint } from './geometry';
 
 describe('circleVsBox', () => {
   const box = { position: { x: 0, y: 0 }, width: 4, height: 2, angle: 0 };
@@ -33,6 +34,48 @@ describe('circleVsBox', () => {
     const collision = circleVsBox({ x: 0, y: 0.5 }, 0.5, box);
     expect(collision).not.toBeNull();
     expect(collision?.normal).toEqual({ x: 0, y: 1 });
+  });
+});
+
+describe('circleVsObstacle', () => {
+  it('matches circleVsBox exactly when angle is 0', () => {
+    const box = { position: { x: 0, y: 0 }, width: 4, height: 2, angle: 0 };
+    const centre = { x: 2.3, y: 1.3 };
+    const withBox = circleVsBox(centre, 0.5, box);
+    const withObstacle = circleVsObstacle(centre, 0.5, box);
+    if (!withBox || !withObstacle) throw new Error('expected a collision');
+
+    expect(withObstacle.normal.x).toBeCloseTo(withBox.normal.x);
+    expect(withObstacle.normal.y).toBeCloseTo(withBox.normal.y);
+    expect(withObstacle.penetration).toBeCloseTo(withBox.penetration);
+  });
+
+  // A ball colliding with a rotated obstacle should produce a
+  // physically-equivalent world-space collision (same penetration, and a
+  // normal rotated the same way the obstacle and ball position were) as the
+  // same collision expressed axis-aligned. Checked at 90/180/270 degrees,
+  // where the rotated box's own width/height also line up with the
+  // unrotated box's after rotation.
+  const baseBox = { position: { x: 1, y: -2 }, width: 4, height: 2, angle: 0 };
+  const baseCentre = { x: 3.3, y: -0.7 }; // overlaps the box's top-right corner
+
+  it.each([90, 180, 270])('is equivalent to the unrotated case at %d degrees', (angle) => {
+    const unrotated = circleVsObstacle(baseCentre, 0.5, baseBox);
+
+    const rotatedBox = { ...baseBox, angle };
+    const rotatedCentre = rotatePoint(baseCentre, angle, baseBox.position);
+    const rotated = circleVsObstacle(rotatedCentre, 0.5, rotatedBox);
+    if (!unrotated || !rotated) throw new Error('expected a collision');
+
+    const expectedNormal = rotatePoint(unrotated.normal, angle, { x: 0, y: 0 });
+    expect(rotated.normal.x).toBeCloseTo(expectedNormal.x);
+    expect(rotated.normal.y).toBeCloseTo(expectedNormal.y);
+    expect(rotated.penetration).toBeCloseTo(unrotated.penetration);
+  });
+
+  it('returns null when the ball is far from a rotated obstacle', () => {
+    const box = { position: { x: 0, y: 0 }, width: 4, height: 2, angle: 45 };
+    expect(circleVsObstacle({ x: 10, y: 10 }, 0.5, box)).toBeNull();
   });
 });
 
