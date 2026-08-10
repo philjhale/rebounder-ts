@@ -158,8 +158,15 @@ function drawObstacle(
   const pattern = ctx.createPattern(tile, 'repeat');
   if (!pattern) return;
 
+  // Canvas rotation is the mirror image of world rotation (worldToScreen
+  // flips y), so the clockwise-positive world angle becomes a
+  // counter-clockwise (negated) canvas rotation.
+  const angleRadians = (-obstacle.angle * Math.PI) / 180;
+
   ctx.save();
-  ctx.translate(screen.x - widthPx / 2, screen.y - heightPx / 2);
+  ctx.translate(screen.x, screen.y);
+  ctx.rotate(angleRadians);
+  ctx.translate(-widthPx / 2, -heightPx / 2);
   ctx.fillStyle = pattern;
   ctx.fillRect(0, 0, widthPx, heightPx);
   ctx.restore();

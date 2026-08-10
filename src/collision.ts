@@ -1,3 +1,4 @@
+import { rotatePoint } from './geometry';
 import type { ObstacleData, Vec2 } from './types';
 
 export interface Collision {
@@ -44,6 +45,22 @@ export function circleVsBox(centre: Vec2, radius: number, box: ObstacleData): Co
     return { normal: { x: signX, y: 0 }, penetration: overlapX + radius };
   }
   return { normal: { x: 0, y: signY }, penetration: overlapY + radius };
+}
+
+// Circle vs a (possibly rotated) box. Rotates the circle's centre into the
+// box's local, unrotated space by -box.angle around the box's centre, runs
+// the existing axis-aligned circleVsBox there unchanged, then rotates the
+// resulting normal by +box.angle back into world space. When box.angle is 0
+// this is equivalent to calling circleVsBox directly.
+export function circleVsObstacle(centre: Vec2, radius: number, box: ObstacleData): Collision | null {
+  const localCentre = rotatePoint(centre, -box.angle, box.position);
+  const collision = circleVsBox(localCentre, radius, box);
+  if (!collision) return null;
+
+  return {
+    normal: rotatePoint(collision.normal, box.angle, { x: 0, y: 0 }),
+    penetration: collision.penetration,
+  };
 }
 
 // Circle vs circle. Returns null when the circles don't overlap, otherwise

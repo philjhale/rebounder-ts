@@ -1,4 +1,4 @@
-import { circleVsBox, circleVsCircle, circleVsSegment, reflect, type Collision } from './collision';
+import { circleVsCircle, circleVsObstacle, circleVsSegment, reflect, type Collision } from './collision';
 import type { Colour, Level, LauncherData, LineCounts, TeleporterData, Vec2 } from './types';
 
 export const BALL_SPEED = 7;
@@ -215,7 +215,7 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
   let colour = ball.colour;
 
   for (const obstacle of level.obstacles) {
-    const collision = circleVsBox(position, BALL_RADIUS, obstacle);
+    const collision = circleVsObstacle(position, BALL_RADIUS, obstacle);
     if (!collision) continue;
 
     const bounce = resolveBounce(position, velocity, collision);
