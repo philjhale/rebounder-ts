@@ -1,6 +1,8 @@
 import type { LineCounts } from './types';
-import { remainingLinesSprite } from './sprites';
+import { remainingLinesSprite, spritePath } from './sprites';
 import { required } from './dom';
+
+const PAUSE_ICON_PATH = spritePath('GUI_Pause');
 
 const HUD_COLOURS = ['Orange', 'Blue', 'Green', 'Purple'] as const;
 
@@ -28,14 +30,13 @@ export function renderHud(container: HTMLElement, options: HudOptions): Hud {
       ${HUD_COLOURS.map(
         (colour) => `
         <div class="hud__remaining-slot" data-testid="hud-remaining-${colour}">
-          <img class="hud__remaining-icon" src="/sprites/${remainingLinesSprite(colour)}.png" alt="${colour}" />
-          <span class="hud__remaining-count" data-testid="hud-remaining-count-${colour}"></span>
+          <img class="hud__remaining-icon" src="${spritePath(remainingLinesSprite(colour))}" alt="${colour}" />
         </div>
       `,
       ).join('')}
     </div>
     <button type="button" class="hud__pause-button" data-testid="hud-pause-button" aria-label="Pause">
-      <img src="/sprites/GUI_Pause.png" alt="" />
+      <img src="${PAUSE_ICON_PATH}" alt="" />
     </button>
   `;
 
@@ -51,17 +52,11 @@ export function renderHud(container: HTMLElement, options: HudOptions): Hud {
       container.querySelector<HTMLDivElement>(`[data-testid="hud-remaining-${colour}"]`),
       `hud-remaining-${colour} element not found after render`,
     ),
-    count: required(
-      container.querySelector<HTMLSpanElement>(`[data-testid="hud-remaining-count-${colour}"]`),
-      `hud-remaining-count-${colour} element not found after render`,
-    ),
   }));
 
   function update(counts: LineCounts): void {
-    for (const { colour, slot, count } of slots) {
-      const remaining = counts[colour];
-      count.textContent = String(remaining);
-      slot.classList.toggle('hud__remaining-slot--empty', remaining <= 0);
+    for (const { colour, slot } of slots) {
+      slot.classList.toggle('hud__remaining-slot--empty', counts[colour] <= 0);
     }
   }
 

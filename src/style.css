@@ -86,13 +86,6 @@ canvas {
   gap: 0.5rem;
 }
 
-.hud__remaining-slot {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .hud__remaining-icon {
   width: 2rem;
   height: 2rem;
@@ -102,14 +95,6 @@ canvas {
 .hud__remaining-slot--empty .hud__remaining-icon {
   filter: grayscale(100%);
   opacity: 0.4;
-}
-
-.hud__remaining-count {
-  position: absolute;
-  font-weight: bold;
-  font-size: 0.9rem;
-  color: #fff;
-  text-shadow: 0 0 2px #000, 0 0 2px #000;
 }
 
 .hud__pause-button {

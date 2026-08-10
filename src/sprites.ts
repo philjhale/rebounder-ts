@@ -104,6 +104,10 @@ export function remainingLinesSprite(colour: Colour): SpriteName {
   return `GUI_Remain${colour}` as SpriteName;
 }
 
+export function spritePath(name: SpriteName): string {
+  return `/sprites/${name}.png`;
+}
+
 export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> {
   const entries = await Promise.all(
     SPRITE_NAMES.map(
@@ -112,7 +116,7 @@ export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> 
           const image = new Image();
           image.onload = () => { resolve([name, image]); };
           image.onerror = () => { reject(new Error(`Failed to load sprite: ${name}`)); };
-          image.src = `/sprites/${name}.png`;
+          image.src = spritePath(name);
         }),
     ),
   );

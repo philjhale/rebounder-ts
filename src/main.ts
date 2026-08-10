@@ -74,7 +74,7 @@ async function showLevel(index: number): Promise<void> {
       <button type="button" class="back-button">&larr; Levels</button>
       <canvas width="${String(CANVAS_WIDTH)}" height="${String(CANVAS_HEIGHT)}"></canvas>
       <div class="hud" data-testid="hud"></div>
-      <div class="overlay overlay--hidden" data-testid="pause-overlay"
+      <div class="overlay overlay--hidden" data-testid="pause-overlay">
         <div class="overlay__panel">
           <h2>Paused</h2>
           <button type="button" class="overlay__button" data-action="resume">Resume</button>
