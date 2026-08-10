@@ -13,11 +13,7 @@ import {
 } from './screens';
 import { hasSeenHowToPlay, setHasSeenHowToPlay } from './save';
 import { levels } from './levels';
-
-function required<T>(value: T | null, message: string): T {
-  if (value === null) throw new Error(message);
-  return value;
-}
+import { required } from './dom';
 
 const app = required(document.querySelector<HTMLDivElement>('#app'), '#app element not found');
 

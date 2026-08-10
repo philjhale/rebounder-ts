@@ -1,6 +1,7 @@
 import { levels } from './levels';
 import { getFrontierPointer, getLevelState } from './progression';
 import type { Level } from './types';
+import { required } from './dom';
 
 export interface LevelPickerOptions {
   /** Invoked when the player picks a done or current (playable) level. */
@@ -30,12 +31,16 @@ export function renderLevelPicker(container: HTMLElement, options: LevelPickerOp
     <ul class="level-picker" data-testid="level-picker"></ul>
   `;
 
-  const backButton = container.querySelector<HTMLButtonElement>('[data-testid="picker-back-button"]');
-  if (!backButton) throw new Error('picker-back-button element not found after render');
+  const backButton = required(
+    container.querySelector<HTMLButtonElement>('[data-testid="picker-back-button"]'),
+    'picker-back-button element not found after render',
+  );
   backButton.addEventListener('click', options.onBack);
 
-  const list = container.querySelector<HTMLUListElement>('.level-picker');
-  if (!list) throw new Error('.level-picker element not found after render');
+  const list = required(
+    container.querySelector<HTMLUListElement>('.level-picker'),
+    '.level-picker element not found after render',
+  );
 
   let frontierIndex = -1;
 

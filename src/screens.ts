@@ -1,3 +1,5 @@
+import { required } from './dom';
+
 /**
  * Render functions for the menu-flow screens that are static DOM/CSS chrome
  * (ADR 0006) with no game-loop or picker state of their own: `title`,
@@ -7,6 +9,13 @@
  * it's coupled to. main.ts's `Screen` state machine owns when each of these
  * is shown.
  */
+
+function bindAction(container: HTMLElement, action: string, listener: () => void): void {
+  required(
+    container.querySelector<HTMLButtonElement>(`[data-action="${action}"]`),
+    `[data-action="${action}"] element not found after render`,
+  ).addEventListener('click', listener);
+}
 
 export interface TitleScreenOptions {
   onPlay: () => void;
@@ -24,15 +33,9 @@ export function renderTitleScreen(container: HTMLElement, options: TitleScreenOp
     </div>
   `;
 
-  container
-    .querySelector<HTMLButtonElement>('[data-action="play"]')
-    ?.addEventListener('click', options.onPlay);
-  container
-    .querySelector<HTMLButtonElement>('[data-action="how-to-play"]')
-    ?.addEventListener('click', options.onHowToPlay);
-  container
-    .querySelector<HTMLButtonElement>('[data-action="credits"]')
-    ?.addEventListener('click', options.onCredits);
+  bindAction(container, 'play', options.onPlay);
+  bindAction(container, 'how-to-play', options.onHowToPlay);
+  bindAction(container, 'credits', options.onCredits);
 }
 
 export interface HowToPlayScreenOptions {
@@ -55,9 +58,7 @@ export function renderHowToPlayScreen(
     </div>
   `;
 
-  container
-    .querySelector<HTMLButtonElement>('[data-action="continue"]')
-    ?.addEventListener('click', options.onContinue);
+  bindAction(container, 'continue', options.onContinue);
 }
 
 export interface CreditsScreenOptions {
@@ -73,9 +74,7 @@ export function renderCreditsScreen(container: HTMLElement, options: CreditsScre
     </div>
   `;
 
-  container
-    .querySelector<HTMLButtonElement>('[data-action="back"]')
-    ?.addEventListener('click', options.onBack);
+  bindAction(container, 'back', options.onBack);
 }
 
 export interface AllLevelsCompleteScreenOptions {
@@ -94,7 +93,5 @@ export function renderAllLevelsCompleteScreen(
     </div>
   `;
 
-  container
-    .querySelector<HTMLButtonElement>('[data-action="back-to-levels"]')
-    ?.addEventListener('click', options.onBackToLevels);
+  bindAction(container, 'back-to-levels', options.onBackToLevels);
 }
