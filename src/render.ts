@@ -1,7 +1,7 @@
 import type { Level, Vec2 } from './types';
 import {
+  animatedSpriteName,
   ballSprite,
-  colourChangerSprite,
   launcherInnerSprite,
   launcherSprite,
   lineCapSprite,
@@ -60,6 +60,16 @@ const SPRITE_WORLD_SIZE: Record<
   Teleporter: 2,
   Ball: BALL_RADIUS * 2,
 };
+
+// Frame-sequence data for the tk2d-style autoplay-looping animations, per
+// issue #26's research. ColourChanger has 5 frames at 10fps; the only
+// Teleporter variant currently in use (Club) is a 4-unique-frame clip whose
+// 12-keyframe/30fps encoding is visually equivalent to 4 frames at 10fps
+// (each frame held for 0.1s either way).
+const COLOUR_CHANGER_FRAME_COUNT = 5;
+const COLOUR_CHANGER_FPS = 10;
+const TELEPORTER_CLUB_FRAME_COUNT = 4;
+const TELEPORTER_CLUB_FPS = 10;
 
 function drawImageCentred(
   ctx: CanvasRenderingContext2D,
@@ -218,6 +228,7 @@ export function renderLevel(
   balls: Ball[] = [],
   targets: TargetRuntimeState[] = [],
   lines: Line[] = [],
+  elapsedTime = 0,
 ) {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -233,7 +244,12 @@ export function renderLevel(
     drawSprite(
       ctx,
       sprites,
-      'TeleporterClubF1',
+      animatedSpriteName(
+        'TeleporterClub',
+        TELEPORTER_CLUB_FRAME_COUNT,
+        TELEPORTER_CLUB_FPS,
+        elapsedTime,
+      ),
       teleporter.position.x,
       teleporter.position.y,
       'Teleporter',
@@ -244,7 +260,12 @@ export function renderLevel(
     drawSprite(
       ctx,
       sprites,
-      colourChangerSprite(colourChanger.colour),
+      animatedSpriteName(
+        `ColourChanger${colourChanger.colour}`,
+        COLOUR_CHANGER_FRAME_COUNT,
+        COLOUR_CHANGER_FPS,
+        elapsedTime,
+      ),
       colourChanger.position.x,
       colourChanger.position.y,
       'ColourChanger',

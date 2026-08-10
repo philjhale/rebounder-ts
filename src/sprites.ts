@@ -63,6 +63,30 @@ export function colourChangerSprite(colour: Colour): SpriteName {
   return `ColourChanger${colour}F1` as SpriteName;
 }
 
+// Pure frame-selection helper for tk2d-style autoplay-looping sprite
+// animations (ColourChanger, Teleporter — see issue #26's research).
+// All instances of a given clip play identically: frame choice depends only
+// on a single global elapsedTime, never on per-entity state, so there is
+// nothing here to store in GameState.
+//
+// Frame files follow the `{baseName}F{n}` convention (issue #37); only F1
+// exists on disk today; the SpriteName cast is intentionally permissive
+// about not-yet-extracted frames — loadSprites()/drawSprite() already
+// degrade missing entries gracefully (see sprites.ts's loadSprites and
+// render.ts's drawSprite, which both no-op/skip on a missing lookup).
+export function animatedSpriteName(
+  baseName: string,
+  frameCount: number,
+  fps: number,
+  elapsedTime: number,
+): SpriteName {
+  if (frameCount <= 1) return `${baseName}F1` as SpriteName;
+
+  const rawFrame = Math.floor(elapsedTime * fps);
+  const frameIndex = ((rawFrame % frameCount) + frameCount) % frameCount;
+  return `${baseName}F${String(frameIndex + 1)}` as SpriteName;
+}
+
 export function lineCapSprite(colour: Colour): SpriteName {
   return `LineCap${colour}` as SpriteName;
 }

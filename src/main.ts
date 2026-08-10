@@ -71,7 +71,12 @@ async function showLevel(level: Level) {
 
     state = updateGame(state, { pointerEvents: pendingPointerEvents }, deltaTime);
     pendingPointerEvents = [];
-    renderLevel(ctx, level, sprites, state.balls, state.targets, state.lines);
+    // `time` is the rAF-supplied DOMHighResTimeStamp (ms since page load) —
+    // reused directly as the animator's elapsed-time clock rather than
+    // introducing a second accumulator, since animation is presentation-only
+    // and doesn't need to reset with level/game state (see animatedSpriteName
+    // in sprites.ts).
+    renderLevel(ctx, level, sprites, state.balls, state.targets, state.lines, time / 1000);
 
     requestAnimationFrame(tick);
   }
