@@ -35,6 +35,11 @@ const SPRITE_NAMES = [
   'LineInnerBlue',
   'LineInnerGreen',
   'LineInnerPurple',
+  'GUI_Pause',
+  'GUI_RemainOrange',
+  'GUI_RemainBlue',
+  'GUI_RemainGreen',
+  'GUI_RemainPurple',
 ] as const;
 
 export type SpriteName = (typeof SPRITE_NAMES)[number];
@@ -93,6 +98,10 @@ export function lineCapSprite(colour: Colour): SpriteName {
 
 export function lineInnerSprite(colour: Colour): SpriteName {
   return `LineInner${colour}` as SpriteName;
+}
+
+export function remainingLinesSprite(colour: Colour): SpriteName {
+  return `GUI_Remain${colour}` as SpriteName;
 }
 
 export async function loadSprites(): Promise<Map<SpriteName, HTMLImageElement>> {

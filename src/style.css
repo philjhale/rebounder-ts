@@ -71,6 +71,62 @@ canvas {
   position: relative;
 }
 
+.hud {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem;
+  pointer-events: none;
+}
+
+.hud__remaining {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hud__remaining-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hud__remaining-icon {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+}
+
+.hud__remaining-slot--empty .hud__remaining-icon {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.hud__remaining-count {
+  position: absolute;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #fff;
+  text-shadow: 0 0 2px #000, 0 0 2px #000;
+}
+
+.hud__pause-button {
+  pointer-events: auto;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.hud__pause-button img {
+  width: 2rem;
+  height: 2rem;
+  display: block;
+}
+
 .overlay {
   position: absolute;
   inset: 0;
