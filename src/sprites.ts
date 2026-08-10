@@ -23,10 +23,29 @@ const SPRITE_NAMES = [
   'TargetHitPurple',
   'Obstacle',
   'ColourChangerOrangeF1',
+  'ColourChangerOrangeF2',
+  'ColourChangerOrangeF3',
+  'ColourChangerOrangeF4',
+  'ColourChangerOrangeF5',
   'ColourChangerBlueF1',
+  'ColourChangerBlueF2',
+  'ColourChangerBlueF3',
+  'ColourChangerBlueF4',
+  'ColourChangerBlueF5',
   'ColourChangerGreenF1',
+  'ColourChangerGreenF2',
+  'ColourChangerGreenF3',
+  'ColourChangerGreenF4',
+  'ColourChangerGreenF5',
   'ColourChangerPurpleF1',
+  'ColourChangerPurpleF2',
+  'ColourChangerPurpleF3',
+  'ColourChangerPurpleF4',
+  'ColourChangerPurpleF5',
   'TeleporterClubF1',
+  'TeleporterClubF2',
+  'TeleporterClubF3',
+  'TeleporterClubF4',
   'LineCapOrange',
   'LineCapBlue',
   'LineCapGreen',
@@ -74,11 +93,14 @@ export function colourChangerSprite(colour: Colour): SpriteName {
 // on a single global elapsedTime, never on per-entity state, so there is
 // nothing here to store in GameState.
 //
-// Frame files follow the `{baseName}F{n}` convention (issue #37); only F1
-// exists on disk today; the SpriteName cast is intentionally permissive
-// about not-yet-extracted frames — loadSprites()/drawSprite() already
-// degrade missing entries gracefully (see sprites.ts's loadSprites and
-// render.ts's drawSprite, which both no-op/skip on a missing lookup).
+// Frame files follow the `{baseName}F{n}` convention (issue #37). Frames
+// exist on disk for ColourChanger (F1-F5, all colours) and TeleporterClub
+// (F1-F4); TeleporterSpot/Stripe are out of scope (unused — render.ts
+// hardcodes Club as the only variant in play). The SpriteName cast stays
+// permissive about any other not-yet-extracted frames — loadSprites()/
+// drawSprite() degrade missing entries gracefully (see sprites.ts's
+// loadSprites and render.ts's drawSprite, which both no-op/skip on a
+// missing lookup).
 export function animatedSpriteName(
   baseName: string,
   frameCount: number,
