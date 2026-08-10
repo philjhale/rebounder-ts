@@ -1,10 +1,10 @@
 {
-  "id": "first-coloured-line",
-  "name": "FirstColouredLine",
+  "id": "two-uprights",
+  "name": "TwoUprights",
   "launchers": [
     {
       "position": {
-        "x": -5,
+        "x": -2,
         "y": -9
       },
       "colour": "Blue",
@@ -13,19 +13,10 @@
     },
     {
       "position": {
-        "x": 0,
+        "x": -12,
         "y": -9
       },
-      "colour": "Green",
-      "enabled": true,
-      "angle": 0
-    },
-    {
-      "position": {
-        "x": 5,
-        "y": -9
-      },
-      "colour": "Purple",
+      "colour": "Orange",
       "enabled": true,
       "angle": 0
     }
@@ -33,27 +24,39 @@
   "targets": [
     {
       "position": {
-        "x": 17,
-        "y": 3
+        "x": 8,
+        "y": -9.25
       },
-      "colour": "Green"
+      "colour": "Orange"
     },
     {
       "position": {
-        "x": 17,
-        "y": -3
-      },
-      "colour": "Purple"
-    },
-    {
-      "position": {
-        "x": -17,
-        "y": 0
+        "x": 13,
+        "y": -9.25
       },
       "colour": "Blue"
     }
   ],
-  "obstacles": [],
+  "obstacles": [
+    {
+      "position": {
+        "x": -7,
+        "y": -4
+      },
+      "width": 4,
+      "height": 12,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 3,
+        "y": -4
+      },
+      "width": 4,
+      "height": 12,
+      "angle": 0
+    }
+  ],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {

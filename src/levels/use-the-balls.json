@@ -1,0 +1,49 @@
+{
+  "id": "use-the-balls",
+  "name": "UseTheBalls",
+  "launchers": [
+    {
+      "position": {
+        "x": -15,
+        "y": -4
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -90
+    },
+    {
+      "position": {
+        "x": -15,
+        "y": 4
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": -90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 8,
+        "y": 9.25
+      },
+      "colour": "Orange"
+    },
+    {
+      "position": {
+        "x": 8,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 2,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

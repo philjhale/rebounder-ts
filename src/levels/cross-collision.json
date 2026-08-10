@@ -1,0 +1,86 @@
+{
+  "id": "cross-collision",
+  "name": "CrossCollision",
+  "launchers": [
+    {
+      "position": {
+        "x": 0,
+        "y": 9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -180
+    },
+    {
+      "position": {
+        "x": 12,
+        "y": 0
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -14,
+        "y": 0
+      },
+      "colour": "Orange"
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": -13,
+        "y": 7
+      },
+      "width": 20,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 13,
+        "y": -7
+      },
+      "width": 20,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -13,
+        "y": -7
+      },
+      "width": 20,
+      "height": 8,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 13,
+        "y": 7
+      },
+      "width": 20,
+      "height": 8,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

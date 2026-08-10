@@ -1,10 +1,19 @@
 {
-  "id": "scene1",
-  "name": "Scene1",
+  "id": "first-two-target",
+  "name": "FirstTwoTarget",
   "launchers": [
     {
       "position": {
-        "x": -9,
+        "x": 3,
+        "y": -9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -3,
         "y": -9
       },
       "colour": "Orange",
@@ -15,17 +24,24 @@
   "targets": [
     {
       "position": {
-        "x": 17,
+        "x": -17,
         "y": 0
       },
       "colour": "Orange"
+    },
+    {
+      "position": {
+        "x": 17,
+        "y": 0
+      },
+      "colour": "Blue"
     }
   ],
   "obstacles": [],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 1,
+    "Orange": 2,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

@@ -1,6 +1,6 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "use-the-obstacle2",
+  "name": "UseTheObstacle2",
   "launchers": [
     {
       "position": {
@@ -16,31 +16,12 @@
     {
       "position": {
         "x": -13.75,
-        "y": 3.00000024
+        "y": 0
       },
       "colour": "Orange"
     }
   ],
-  "obstacles": [
-    {
-      "position": {
-        "x": -5,
-        "y": -6
-      },
-      "width": 1,
-      "height": 8,
-      "angle": 0
-    },
-    {
-      "position": {
-        "x": 0,
-        "y": 3
-      },
-      "width": 1,
-      "height": 14,
-      "angle": 0
-    }
-  ],
+  "obstacles": [],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {

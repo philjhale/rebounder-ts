@@ -1,10 +1,10 @@
 {
-  "id": "first-teleporter",
-  "name": "FirstTeleporter",
+  "id": "fill-the-gap",
+  "name": "FillTheGap",
   "launchers": [
     {
       "position": {
-        "x": -9,
+        "x": -11,
         "y": -9
       },
       "colour": "Orange",
@@ -16,7 +16,7 @@
     {
       "position": {
         "x": 14,
-        "y": 2
+        "y": -6
       },
       "colour": "Orange"
     }
@@ -25,32 +25,44 @@
     {
       "position": {
         "x": 0,
-        "y": 0
+        "y": 8
       },
-      "width": 1,
-      "height": 31.25,
+      "width": 12,
+      "height": 4,
       "angle": 0
-    }
-  ],
-  "teleporters": [
-    {
-      "position": {
-        "x": 3,
-        "y": 2
-      },
-      "pairId": "1075075527|238982469"
     },
     {
       "position": {
-        "x": -3,
-        "y": 2
+        "x": 0,
+        "y": -5.5
       },
-      "pairId": "1075075527|238982469"
+      "width": 12,
+      "height": 9,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 4
+      },
+      "width": 2,
+      "height": 4,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -5,
+        "y": 4
+      },
+      "width": 2,
+      "height": 4,
+      "angle": 0
     }
   ],
+  "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 1,
+    "Orange": 2,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

@@ -1,22 +1,22 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "colour-cross",
+  "name": "ColourCross",
   "launchers": [
     {
       "position": {
-        "x": 14,
-        "y": 0
+        "x": -8,
+        "y": -9
       },
       "colour": "Orange",
       "enabled": true,
-      "angle": 90
+      "angle": 0
     }
   ],
   "targets": [
     {
       "position": {
-        "x": -13.75,
-        "y": 3.00000024
+        "x": 14,
+        "y": 4
       },
       "colour": "Orange"
     }
@@ -24,27 +24,33 @@
   "obstacles": [
     {
       "position": {
-        "x": -5,
-        "y": -6
+        "x": 0.25,
+        "y": 0.25
       },
       "width": 1,
-      "height": 8,
-      "angle": 0
-    },
-    {
-      "position": {
-        "x": 0,
-        "y": 3
-      },
-      "width": 1,
-      "height": 14,
+      "height": 1,
       "angle": 0
     }
   ],
   "teleporters": [],
-  "colourChangers": [],
+  "colourChangers": [
+    {
+      "position": {
+        "x": 0,
+        "y": -17
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 22,
+        "y": 0
+      },
+      "colour": "Orange"
+    }
+  ],
   "lineCounts": {
-    "Orange": 2,
+    "Orange": 1,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

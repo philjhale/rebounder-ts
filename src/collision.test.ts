@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { circleVsBox, circleVsCircle, circleVsSegment, reflect } from './collision';
 
 describe('circleVsBox', () => {
-  const box = { position: { x: 0, y: 0 }, width: 4, height: 2 };
+  const box = { position: { x: 0, y: 0 }, width: 4, height: 2, angle: 0 };
 
   it('returns null when the circle is far from the box', () => {
     expect(circleVsBox({ x: 10, y: 10 }, 0.5, box)).toBeNull();

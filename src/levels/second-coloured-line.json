@@ -1,6 +1,6 @@
 {
-  "id": "first-coloured-line",
-  "name": "FirstColouredLine",
+  "id": "second-coloured-line",
+  "name": "SecondColouredLine",
   "launchers": [
     {
       "position": {
@@ -57,9 +57,9 @@
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 3,
-    "Blue": 0,
-    "Green": 0,
-    "Purple": 0
+    "Orange": 0,
+    "Blue": 1,
+    "Green": 1,
+    "Purple": 1
   }
 }

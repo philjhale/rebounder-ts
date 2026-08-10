@@ -1,6 +1,6 @@
 {
-  "id": "use-the-obstacle",
-  "name": "UseTheObstacle",
+  "id": "three-vertical-lines",
+  "name": "ThreeVerticalLines",
   "launchers": [
     {
       "position": {
@@ -16,7 +16,7 @@
     {
       "position": {
         "x": -13.75,
-        "y": 3.00000024
+        "y": 0
       },
       "colour": "Orange"
     }
@@ -24,27 +24,36 @@
   "obstacles": [
     {
       "position": {
-        "x": -5,
-        "y": -6
+        "x": -2,
+        "y": -4
       },
       "width": 1,
-      "height": 8,
+      "height": 4,
       "angle": 0
     },
     {
       "position": {
-        "x": 0,
-        "y": 3
+        "x": -2,
+        "y": 4
       },
       "width": 1,
-      "height": 14,
+      "height": 4,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": 0
+      },
+      "width": 1,
+      "height": 4,
       "angle": 0
     }
   ],
   "teleporters": [],
   "colourChangers": [],
   "lineCounts": {
-    "Orange": 2,
+    "Orange": 3,
     "Blue": 0,
     "Green": 0,
     "Purple": 0

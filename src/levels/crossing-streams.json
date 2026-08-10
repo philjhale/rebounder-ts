@@ -1,0 +1,122 @@
+{
+  "id": "crossing-streams",
+  "name": "CrossingStreams",
+  "launchers": [
+    {
+      "position": {
+        "x": 9.25,
+        "y": -8.20783424
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": 9.25,
+        "y": -8.20783424
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 45
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -14.25,
+        "y": -4
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 14.25,
+        "y": -4
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 7,
+        "y": 1
+      },
+      "width": 6,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -7,
+        "y": 1
+      },
+      "width": 6,
+      "height": 1,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

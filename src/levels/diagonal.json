@@ -1,10 +1,19 @@
 {
-  "id": "scene1",
-  "name": "Scene1",
+  "id": "diagonal",
+  "name": "Diagonal",
   "launchers": [
     {
       "position": {
-        "x": -9,
+        "x": 0.300000012,
+        "y": 9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -180
+    },
+    {
+      "position": {
+        "x": -0.300000012,
         "y": -9
       },
       "colour": "Orange",
@@ -15,10 +24,17 @@
   "targets": [
     {
       "position": {
-        "x": 17,
+        "x": -14,
         "y": 0
       },
       "colour": "Orange"
+    },
+    {
+      "position": {
+        "x": 14,
+        "y": 0
+      },
+      "colour": "Blue"
     }
   ],
   "obstacles": [],

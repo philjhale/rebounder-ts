@@ -1,0 +1,113 @@
+{
+  "id": "coloured-line-five",
+  "name": "ColouredLineFive",
+  "launchers": [
+    {
+      "position": {
+        "x": 4.82464218,
+        "y": 5.32203245
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -135
+    },
+    {
+      "position": {
+        "x": 13.25,
+        "y": 2.25
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 45
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -14.25,
+        "y": -5
+      },
+      "colour": "Blue"
+    },
+    {
+      "position": {
+        "x": 14.25,
+        "y": -3
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 12.5,
+        "y": 0
+      },
+      "width": 11,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -6.5,
+        "y": 5.5
+      },
+      "width": 1,
+      "height": 12,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 6.5,
+        "y": 4.5
+      },
+      "width": 1,
+      "height": 12,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -12.5,
+        "y": 0
+      },
+      "width": 11,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 1,
+    "Green": 0,
+    "Purple": 0
+  }
+}

@@ -346,7 +346,7 @@ describe('updateGame: target scoring', () => {
 describe('updateGame: obstacle collision', () => {
   it('bounces a ball off an obstacle, preserving speed', () => {
     const level = makeLevel({
-      obstacles: [{ position: { x: 5, y: 0 }, width: 2, height: 10 }],
+      obstacles: [{ position: { x: 5, y: 0 }, width: 2, height: 10, angle: 0 }],
     });
     let state: GameState = {
       ...createInitialState(level),
@@ -371,7 +371,7 @@ describe('updateGame: obstacle collision', () => {
 
   it('leaves a ball moving away from an obstacle untouched', () => {
     const level = makeLevel({
-      obstacles: [{ position: { x: 5, y: 0 }, width: 2, height: 10 }],
+      obstacles: [{ position: { x: 5, y: 0 }, width: 2, height: 10, angle: 0 }],
     });
     let state: GameState = {
       ...createInitialState(level),

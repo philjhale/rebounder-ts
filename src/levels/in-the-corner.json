@@ -1,0 +1,122 @@
+{
+  "id": "in-the-corner",
+  "name": "InTheCorner",
+  "launchers": [
+    {
+      "position": {
+        "x": 11.7391644,
+        "y": 8.21461678
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": 135
+    },
+    {
+      "position": {
+        "x": 2.2806437,
+        "y": 8.22451591
+      },
+      "colour": "Green",
+      "enabled": true,
+      "angle": -135
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 5,
+        "y": 9.25
+      },
+      "colour": "Green"
+    },
+    {
+      "position": {
+        "x": -4,
+        "y": -9.25
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 2,
+        "y": 7.5
+      },
+      "width": 1,
+      "height": 5,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -7.5
+      },
+      "width": 1,
+      "height": 5,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 1,
+        "y": 1
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 1,
+    "Blue": 2,
+    "Green": 2,
+    "Purple": 0
+  }
+}

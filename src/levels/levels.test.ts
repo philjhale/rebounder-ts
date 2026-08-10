@@ -12,16 +12,9 @@ function expectVec2(value: unknown) {
 }
 
 describe('level data', () => {
-  it('ships exactly the 5 prototype levels', () => {
-    expect(levels.map((l) => l.id).sort()).toEqual(
-      [
-        'scene1',
-        'use-the-obstacle',
-        'first-teleporter',
-        'first-colour-changer',
-        'first-coloured-line',
-      ].sort(),
-    );
+  it('ships all 60 active curriculum levels, each with a unique id', () => {
+    expect(levels.length).toBe(60);
+    expect(new Set(levels.map((l) => l.id)).size).toBe(60);
   });
 
   it.each(levels)('$name conforms to the fixed-field Level schema', (level) => {
@@ -44,6 +37,7 @@ describe('level data', () => {
       expectVec2(obstacle.position);
       expect(obstacle.width).toBeGreaterThan(0);
       expect(obstacle.height).toBeGreaterThan(0);
+      expect(typeof obstacle.angle).toBe('number');
     }
 
     for (const colourChanger of level.colourChangers) {
@@ -75,5 +69,16 @@ describe('level data', () => {
       expect(level.launchers.length).toBeGreaterThan(0);
       expect(level.targets.length).toBeGreaterThan(0);
     }
+  });
+
+  it('includes at least one level with a rotated (non-zero angle) obstacle', () => {
+    const rotatedObstacles = levels.flatMap((l) => l.obstacles).filter((o) => o.angle !== 0);
+    expect(rotatedObstacles.length).toBeGreaterThan(0);
+  });
+
+  it('excludes the two levels commented out in LevelOrderHelper.cs', () => {
+    const ids = levels.map((l) => l.name);
+    expect(ids).not.toContain('UpDraft');
+    expect(ids).not.toContain('OverTheEdge');
   });
 });

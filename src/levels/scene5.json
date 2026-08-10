@@ -1,0 +1,142 @@
+{
+  "id": "scene5",
+  "name": "Scene5",
+  "launchers": [
+    {
+      "position": {
+        "x": 14,
+        "y": -5.5
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 90
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": -14,
+        "y": -5.5
+      },
+      "colour": "Orange"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": -1.44030404,
+        "y": 0.424619436
+      },
+      "width": 1,
+      "height": 1,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0.5
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 135
+    },
+    {
+      "position": {
+        "x": -0.690303981,
+        "y": 1.16088271
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 45
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -10
+      },
+      "width": 10,
+      "height": 10,
+      "angle": 45
+    },
+    {
+      "position": {
+        "x": -1.44030404,
+        "y": 0.424619436
+      },
+      "width": 1,
+      "height": 1,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": -12,
+        "y": 0.5
+      },
+      "width": 16,
+      "height": 1,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -0.690303981,
+        "y": 1.16088271
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 45
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0.5
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 135
+    },
+    {
+      "position": {
+        "x": -1.44030404,
+        "y": 0.424619436
+      },
+      "width": 1,
+      "height": 1,
+      "angle": -45
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 0.5
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 135
+    },
+    {
+      "position": {
+        "x": -0.690303981,
+        "y": 1.16088271
+      },
+      "width": 1,
+      "height": 1,
+      "angle": 45
+    },
+    {
+      "position": {
+        "x": 12,
+        "y": 0.5
+      },
+      "width": 16,
+      "height": 1,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 2,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "large-gap",
+  "name": "LargeGap",
+  "launchers": [
+    {
+      "position": {
+        "x": -11,
+        "y": -9
+      },
+      "colour": "Orange",
+      "enabled": true,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": -11,
+        "y": 9
+      },
+      "colour": "Blue",
+      "enabled": true,
+      "angle": -180
+    }
+  ],
+  "targets": [
+    {
+      "position": {
+        "x": 11,
+        "y": -9.25
+      },
+      "colour": "Orange"
+    },
+    {
+      "position": {
+        "x": 11,
+        "y": 9.25
+      },
+      "colour": "Blue"
+    }
+  ],
+  "obstacles": [
+    {
+      "position": {
+        "x": 0,
+        "y": 9
+      },
+      "width": 12,
+      "height": 8.0625,
+      "angle": 0
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": -9
+      },
+      "width": 12,
+      "height": 8,
+      "angle": 0
+    }
+  ],
+  "teleporters": [],
+  "colourChangers": [],
+  "lineCounts": {
+    "Orange": 3,
+    "Blue": 0,
+    "Green": 0,
+    "Purple": 0
+  }
+}
