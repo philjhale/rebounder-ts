@@ -180,7 +180,7 @@ async function showLevel(index: number): Promise<void> {
     app.querySelector<HTMLDivElement>('[data-testid="hud"]'),
     'hud element not found',
   );
-  const hud = renderHud(hudContainer, { onPause: openPause });
+  const hud = renderHud(hudContainer, { onPause: openPause }, level.lineCounts);
 
   function tick(time: number) {
     if (stopped) return;

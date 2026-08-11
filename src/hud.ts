@@ -15,25 +15,57 @@ export interface Hud {
   update: (counts: LineCounts) => void;
 }
 
+export interface RemainingSlot {
+  colour: keyof LineCounts;
+  /** This slot's position among slots of the same colour, e.g. the 2nd Orange slot is 1. */
+  indexWithinColour: number;
+}
+
 /**
- * Renders the in-game HUD (per-colour remaining-line indicators top-left,
- * pause button top-right) into `container`, replacing its contents.
- *
- * A stable 4-slot layout is always rendered — colours a level doesn't use
- * simply count down to (and stay at) zero, greyed out. The HUD owns no
- * gameplay state of its own; `update()` is a pure read of the caller's
- * `GameState.remainingLineCounts` each frame (issue #46).
+ * The initial HUD layout for a level's line budget: one slot per Line the
+ * player starts with, grouped by Colour in fixed Orange/Blue/Green/Purple
+ * order. Colours with a count of zero contribute no slots.
  */
-export function renderHud(container: HTMLElement, options: HudOptions): Hud {
+export function layoutRemainingSlots(counts: LineCounts): RemainingSlot[] {
+  return HUD_COLOURS.flatMap((colour) =>
+    Array.from({ length: counts[colour] }, (_, indexWithinColour) => ({ colour, indexWithinColour })),
+  );
+}
+
+/** Whether a given slot should render as used up, given the current remaining counts. */
+export function isSlotEmpty(counts: LineCounts, { colour, indexWithinColour }: RemainingSlot): boolean {
+  return indexWithinColour >= counts[colour];
+}
+
+function slotTestId({ colour, indexWithinColour }: RemainingSlot): string {
+  return `hud-remaining-${colour}-${String(indexWithinColour)}`;
+}
+
+/**
+ * Renders the in-game HUD (per-Line remaining indicators top-left, grouped
+ * by Colour; pause button top-right) into `container`, replacing its
+ * contents.
+ *
+ * The slot layout is fixed at render time from `initialCounts` — one slot
+ * per Line the player starts the level with — and never grows or shrinks.
+ * `update()` only toggles individual slots empty as their Line is drawn; it
+ * is a pure read of the caller's `GameState.remainingLineCounts` each frame
+ * (issue #46).
+ */
+export function renderHud(container: HTMLElement, options: HudOptions, initialCounts: LineCounts): Hud {
+  const layout = layoutRemainingSlots(initialCounts);
+
   container.innerHTML = `
     <div class="hud__remaining" data-testid="hud-remaining">
-      ${HUD_COLOURS.map(
-        (colour) => `
-        <div class="hud__remaining-slot" data-testid="hud-remaining-${colour}">
-          <img class="hud__remaining-icon" src="${spritePath(remainingLinesSprite(colour))}" alt="${colour}" />
+      ${layout
+        .map(
+          (remainingSlot) => `
+        <div class="hud__remaining-slot" data-testid="${slotTestId(remainingSlot)}">
+          <img class="hud__remaining-icon" src="${spritePath(remainingLinesSprite(remainingSlot.colour))}" alt="${remainingSlot.colour}" />
         </div>
       `,
-      ).join('')}
+        )
+        .join('')}
     </div>
     <button type="button" class="hud__pause-button" data-testid="hud-pause-button" aria-label="Pause">
       <img src="${PAUSE_ICON_PATH}" alt="" />
@@ -46,17 +78,17 @@ export function renderHud(container: HTMLElement, options: HudOptions): Hud {
   );
   pauseButton.addEventListener('click', options.onPause);
 
-  const slots = HUD_COLOURS.map((colour) => ({
-    colour,
+  const slots = layout.map((remainingSlot) => ({
+    remainingSlot,
     slot: required(
-      container.querySelector<HTMLDivElement>(`[data-testid="hud-remaining-${colour}"]`),
-      `hud-remaining-${colour} element not found after render`,
+      container.querySelector<HTMLDivElement>(`[data-testid="${slotTestId(remainingSlot)}"]`),
+      `${slotTestId(remainingSlot)} element not found after render`,
     ),
   }));
 
   function update(counts: LineCounts): void {
-    for (const { colour, slot } of slots) {
-      slot.classList.toggle('hud__remaining-slot--empty', counts[colour] <= 0);
+    for (const { remainingSlot, slot } of slots) {
+      slot.classList.toggle('hud__remaining-slot--empty', isSlotEmpty(counts, remainingSlot));
     }
   }
 
