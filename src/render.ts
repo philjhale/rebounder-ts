@@ -77,11 +77,16 @@ function drawImageCentred(
   worldX: number,
   worldY: number,
   scale: number,
+  rotationRadians = 0,
 ) {
   const drawWidth = image.width * scale;
   const drawHeight = image.height * scale;
   const screen = worldToScreen(worldX, worldY);
-  ctx.drawImage(image, screen.x - drawWidth / 2, screen.y - drawHeight / 2, drawWidth, drawHeight);
+  ctx.save();
+  ctx.translate(screen.x, screen.y);
+  ctx.rotate(rotationRadians);
+  ctx.drawImage(image, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+  ctx.restore();
 }
 
 // TargetHit pip offsets from the Target's centre, ported from the local
@@ -182,15 +187,21 @@ function drawLauncher(
   innerName: SpriteName,
   worldX: number,
   worldY: number,
+  angleDegrees: number,
 ) {
   const outer = sprites.get(outerName);
   if (!outer) return;
 
+  // The sprite's unrotated art points up the screen, matching a launcher
+  // angle of 0. Screen y is flipped relative to world y (see worldToScreen),
+  // so the canvas rotation is the negation of the world-space launch angle.
+  const rotationRadians = -(angleDegrees * Math.PI) / 180;
+
   const scale = scaleToFit(outer, SPRITE_WORLD_SIZE.Launcher);
-  drawImageCentred(ctx, outer, worldX, worldY, scale);
+  drawImageCentred(ctx, outer, worldX, worldY, scale, rotationRadians);
 
   const inner = sprites.get(innerName);
-  if (inner) drawImageCentred(ctx, inner, worldX, worldY, scale);
+  if (inner) drawImageCentred(ctx, inner, worldX, worldY, scale, rotationRadians);
 }
 
 // Draws a player-drawn Line as a stretched LineInner body between its
@@ -300,6 +311,7 @@ export function renderLevel(
       launcherInnerSprite(launcher.colour),
       launcher.position.x,
       launcher.position.y,
+      launcher.angle,
     );
   }
 
