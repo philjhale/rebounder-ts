@@ -1,8 +1,8 @@
 # Rebounder
 
-A browser/TypeScript port of the Unity game *Rebounder*: the player draws rotatable line segments to deflect coloured balls fired from launchers into matching-coloured targets.
+A browser/TypeScript port of the Unity game I made many years ago called *Rebounder*. The player draws lines to deflect balls fired from launchers into matching-coloured targets.
 
-Ported from the Unity source at `rebounder-unity-reference`, which remains the reference implementation. See [`CONTEXT.md`](./CONTEXT.md) for the game's domain vocabulary (Line, Ball, Launcher, Target, Level, etc.) and [`ROADMAP.md`](./ROADMAP.md) for planned work.
+Converted using Claude [Matt Pocock's skills](https://github.com/mattpocock/skills).
 
 ## Requirements
 
