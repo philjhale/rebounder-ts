@@ -204,6 +204,7 @@ function findTeleporterPartner(teleporters: TeleporterData[], index: number): Te
 interface BallStepResult {
   ball: Ball;
   hitTargetIndices: number[];
+  consumed: boolean;
 }
 
 function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): BallStepResult {
@@ -261,20 +262,29 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
   }
 
   const hitTargetIndices: number[] = [];
-  level.targets.forEach((target, index) => {
+  let consumed = false;
+  for (let index = 0; index < level.targets.length; index++) {
+    const target = level.targets[index];
     const collision = circleVsCircle(position, BALL_RADIUS, target.position, TARGET_RADIUS);
-    if (!collision) return;
+    if (!collision) continue;
+
+    // A matching-colour Ball scores and is consumed by the Target; a
+    // mismatched Ball just bounces off it physically.
+    if (colourMatches(target.colour, colour)) {
+      hitTargetIndices.push(index);
+      consumed = true;
+      break;
+    }
 
     const bounce = resolveBounce(position, velocity, collision);
-    if (!bounce) return;
+    if (!bounce) continue;
     ({ position, velocity } = bounce);
-
-    if (colourMatches(target.colour, colour)) hitTargetIndices.push(index);
-  });
+  }
 
   return {
     ball: { ...ball, position, velocity: renormalize(velocity, BALL_SPEED), colour },
     hitTargetIndices,
+    consumed,
   };
 }
 
@@ -489,7 +499,7 @@ export function updateGame(state: GameState, input: PlayerInput, deltaTime: numb
   const { balls: firedBalls, launchers, nextBallId } = fireLaunchers(afterInput, deltaTime);
 
   const stepped = afterInput.balls.map((ball) => stepBall(ball, afterInput.level, afterInput.lines, deltaTime));
-  const balls = [...stepped.map((result) => result.ball), ...firedBalls];
+  const balls = [...stepped.filter((result) => !result.consumed).map((result) => result.ball), ...firedBalls];
   const hitTargetIndices = new Set(stepped.flatMap((result) => result.hitTargetIndices));
 
   const targets = stepTargets(afterInput.targets, hitTargetIndices, deltaTime);

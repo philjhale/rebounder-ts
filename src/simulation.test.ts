@@ -223,7 +223,7 @@ describe('updateGame: ball movement', () => {
   });
 
   it('is frame-rate independent: many small steps match one big step', () => {
-    const level = makeLevel();
+    const level = makeLevel({ targets: [] });
     const initialBall = { id: 0, position: { x: 0, y: 0 }, velocity: { x: BALL_SPEED, y: 0 }, colour: 'Orange' as const };
 
     let bigStepState: GameState = { ...createInitialState(level), balls: [initialBall] };
@@ -269,6 +269,27 @@ describe('updateGame: target scoring', () => {
     state = updateGame(state, NO_INPUT, 0.05);
 
     expect(state.targets[0].hits).toBe(1);
+  });
+
+  it('removes a same-colour ball from play when it reaches its target', () => {
+    const level = makeLevel({
+      targets: [{ position: { x: 5, y: 0 }, colour: 'Orange' }],
+    });
+    let state: GameState = {
+      ...createInitialState(level),
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - TARGET_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Orange',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    expect(state.balls).toHaveLength(0);
   });
 
   it('bounces the ball but does not score against a different-colour target', () => {
@@ -447,6 +468,7 @@ describe('updateGame: teleporters', () => {
 
   it('leaves a ball untouched when it has not reached a Teleporter', () => {
     const level = makeLevel({
+      targets: [],
       teleporters: [
         { position: { x: 5, y: 0 }, pairId: 'A' },
         { position: { x: -5, y: 0 }, pairId: 'A' },
@@ -488,6 +510,7 @@ describe('updateGame: colour changers', () => {
 
   it('leaves a ball colour untouched when it has not reached a ColourChanger', () => {
     const level = makeLevel({
+      targets: [],
       colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
     });
     let state: GameState = {
