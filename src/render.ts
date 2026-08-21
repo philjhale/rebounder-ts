@@ -231,8 +231,8 @@ function drawLine(ctx: CanvasRenderingContext2D, sprites: Map<SpriteName, HTMLIm
   }
 
   const capEnds: [typeof screenA, number][] = [
-    [screenA, angle + Math.PI],
-    [screenB, angle],
+    [screenA, angle],
+    [screenB, angle + Math.PI],
   ];
   for (const [point, capAngle] of capEnds) {
     ctx.save();
