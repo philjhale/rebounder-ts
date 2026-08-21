@@ -230,10 +230,14 @@ function drawLine(ctx: CanvasRenderingContext2D, sprites: Map<SpriteName, HTMLIm
     ctx.restore();
   }
 
-  for (const point of [screenA, screenB]) {
+  const capEnds: [typeof screenA, number][] = [
+    [screenA, angle + Math.PI],
+    [screenB, angle],
+  ];
+  for (const [point, capAngle] of capEnds) {
     ctx.save();
     ctx.translate(point.x, point.y);
-    ctx.rotate(angle);
+    ctx.rotate(capAngle);
     ctx.drawImage(capImage, -thicknessPx / 2, -thicknessPx / 2, thicknessPx, thicknessPx);
     ctx.restore();
   }
