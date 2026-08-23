@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   BALL_RADIUS,
   BALL_SPEED,
-  COLOUR_CHANGER_RADIUS,
   LAUNCHER_FIRE_INTERVAL,
   LAUNCHER_LONG_PRESS_DURATION,
   LINE_FLICK_DELETE_SPEED,
@@ -19,6 +18,10 @@ import {
   type PointerInputEvent,
 } from './simulation';
 import type { Level } from './types';
+
+// Matches the old fixed COLOUR_CHANGER_RADIUS=1 circle's reach along the
+// x-axis, for tests that used to approach a ColourChanger head-on.
+const COLOUR_CHANGER_HALF_WIDTH = 1;
 
 function makeLevel(overrides: Partial<Level> = {}): Level {
   return {
@@ -489,14 +492,16 @@ describe('updateGame: teleporters', () => {
 describe('updateGame: colour changers', () => {
   it('recolours a ball touching a ColourChanger to the ColourChanger colour', () => {
     const level = makeLevel({
-      colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
+      colourChangers: [
+        { position: { x: 5, y: 0 }, colour: 'Blue', width: COLOUR_CHANGER_HALF_WIDTH * 2, height: 4, angle: 0 },
+      ],
     });
     let state: GameState = {
       ...createInitialState(level),
       balls: [
         {
           id: 0,
-          position: { x: 5 - COLOUR_CHANGER_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          position: { x: 5 - COLOUR_CHANGER_HALF_WIDTH - BALL_RADIUS - 0.01, y: 0 },
           velocity: { x: BALL_SPEED, y: 0 },
           colour: 'Orange',
         },
@@ -511,7 +516,9 @@ describe('updateGame: colour changers', () => {
   it('leaves a ball colour untouched when it has not reached a ColourChanger', () => {
     const level = makeLevel({
       targets: [],
-      colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
+      colourChangers: [
+        { position: { x: 5, y: 0 }, colour: 'Blue', width: COLOUR_CHANGER_HALF_WIDTH * 2, height: 4, angle: 0 },
+      ],
     });
     let state: GameState = {
       ...createInitialState(level),
@@ -525,15 +532,17 @@ describe('updateGame: colour changers', () => {
 
   it('scores a recoloured ball against a target of its new colour', () => {
     const level = makeLevel({
-      colourChangers: [{ position: { x: 5, y: 0 }, colour: 'Blue' }],
-      targets: [{ position: { x: 5 + COLOUR_CHANGER_RADIUS + TARGET_RADIUS, y: 0 }, colour: 'Blue' }],
+      colourChangers: [
+        { position: { x: 5, y: 0 }, colour: 'Blue', width: COLOUR_CHANGER_HALF_WIDTH * 2, height: 4, angle: 0 },
+      ],
+      targets: [{ position: { x: 5 + COLOUR_CHANGER_HALF_WIDTH + TARGET_RADIUS, y: 0 }, colour: 'Blue' }],
     });
     let state: GameState = {
       ...createInitialState(level),
       balls: [
         {
           id: 0,
-          position: { x: 5 - COLOUR_CHANGER_RADIUS - BALL_RADIUS - 0.01, y: 0 },
+          position: { x: 5 - COLOUR_CHANGER_HALF_WIDTH - BALL_RADIUS - 0.01, y: 0 },
           velocity: { x: BALL_SPEED, y: 0 },
           colour: 'Orange',
         },

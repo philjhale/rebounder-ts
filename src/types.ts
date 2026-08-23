@@ -36,6 +36,11 @@ export interface TeleporterData {
 export interface ColourChangerData {
   position: Vec2;
   colour: Colour;
+  width: number;
+  height: number;
+  // Degrees, matching LauncherData.angle's convention: 0 is unrotated/axis-
+  // aligned, clockwise-positive.
+  angle: number;
 }
 
 export interface LineCounts {

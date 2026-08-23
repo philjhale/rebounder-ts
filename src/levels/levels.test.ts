@@ -44,6 +44,9 @@ describe('level data', () => {
     for (const colourChanger of level.colourChangers) {
       expectVec2(colourChanger.position);
       expect(VALID_COLOURS).toContain(colourChanger.colour);
+      expect(colourChanger.width).toBeGreaterThan(0);
+      expect(colourChanger.height).toBeGreaterThan(0);
+      expect(typeof colourChanger.angle).toBe('number');
     }
 
     expect(level.lineCounts.Orange).toBeGreaterThanOrEqual(0);
@@ -116,5 +119,44 @@ describe('level data', () => {
     // the ball, not into the obstacle.
     const dot = collision.normal.x * direction.x + collision.normal.y * direction.y;
     expect(dot).toBeGreaterThan(0);
+  });
+
+  it('keeps FirstColourChanger solvable: a single bounce can route the Launcher through the ColourChanger to the Target', () => {
+    // Regression test: the original Unity level relies on this ColourChanger
+    // being a tall wall (its BoxCollider was hand-resized from the 4-unit
+    // prefab default to 25 units), not a small point, so any reasonable
+    // single-bounce Line sends the Ball through it on the way to the Target.
+    // The converter used to drop that resize, collapsing it to a fixed
+    // radius-1 circle centred 2 units below the Launcher's own height - out
+    // of reach of any straight path from the Launcher to the Target, making
+    // the level unsolvable. Confirm the real box is large enough to still be
+    // crossed by a straight path from just above the Launcher to the Target.
+    const level = levels.find((l) => l.name === 'FirstColourChanger');
+    expect(level).toBeDefined();
+    if (!level) throw new Error('expected FirstColourChanger');
+
+    const launcher = level.launchers[0];
+    const target = level.targets[0];
+    const colourChanger = level.colourChangers[0];
+
+    // A bounce point just above the Launcher, representative of where a
+    // single drawn Line would first redirect the Ball.
+    const bouncePoint = { x: launcher.position.x, y: launcher.position.y + 1 };
+
+    const samples = 500;
+    let crossesColourChanger = false;
+    for (let i = 0; i <= samples; i++) {
+      const t = i / samples;
+      const point = {
+        x: bouncePoint.x + (target.position.x - bouncePoint.x) * t,
+        y: bouncePoint.y + (target.position.y - bouncePoint.y) * t,
+      };
+      if (circleVsObstacle(point, 0.01, colourChanger)) {
+        crossesColourChanger = true;
+        break;
+      }
+    }
+
+    expect(crossesColourChanger).toBe(true);
   });
 });

@@ -27,6 +27,7 @@ import {
   type TeleporterRef,
   type UnityBlock,
 } from './unity-yaml.ts';
+import { rotatePoint } from '../src/geometry.ts';
 import type {
   ColourChangerData,
   Colour,
@@ -387,13 +388,36 @@ function extractTargets(
   return targets;
 }
 
+// ColourChangers use a BoxCollider as their touch area, resized per-Level in
+// several scenes (e.g. FirstColourChanger's is 25 units tall, not the 4-unit
+// prefab default) - unlike Obstacles, its centre is offset from the
+// transform's position (the pivot sits at one edge, not the middle). Bake
+// that offset into the returned position so ColourChangerData.position is
+// already the box's centre, matching ObstacleData's convention.
 function extractColourChangers(blocks: Map<string, UnityBlock>, gameObjects: Map<string, GameObjectInfo>): ColourChangerData[] {
   const colourChangers: ColourChangerData[] = [];
   for (const script of findMonoBehavioursByScriptGuid(blocks, COLOUR_CHANGER_SCRIPT_GUID)) {
     const go = ownerGameObject(script, gameObjects);
-    const { position } = positionOf(go, blocks);
+    const { position, z, w } = positionOf(go, blocks);
+    const angle = quaternionToAngleDegrees(z, w);
     const colourValue = parseNumberField(script.body, 'Colour');
-    colourChangers.push({ position, colour: colourFromEnumValue(colourValue) });
+
+    const boxColliderId = requireComponent(go, '65');
+    const boxCollider = requireBlock(blocks, boxColliderId, `BoxCollider of "${go.name}"`);
+    const size = parseVec2Field(boxCollider.body, 'm_Size');
+    const center = parseVec2Field(boxCollider.body, 'm_Center');
+    const rotatedCenter = rotatePoint(center, angle, { x: 0, y: 0 });
+    // Round away float noise from rotating a non-axis-aligned centre offset
+    // (e.g. cos(90deg) landing on 6.1e-17 instead of exactly 0).
+    const round = (n: number) => Math.round(n * 1e6) / 1e6;
+
+    colourChangers.push({
+      position: { x: round(position.x + rotatedCenter.x), y: round(position.y + rotatedCenter.y) },
+      colour: colourFromEnumValue(colourValue),
+      width: size.x,
+      height: size.y,
+      angle,
+    });
   }
   return colourChangers;
 }

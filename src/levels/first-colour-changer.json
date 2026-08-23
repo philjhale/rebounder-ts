@@ -26,10 +26,13 @@
   "colourChangers": [
     {
       "position": {
-        "x": 0,
-        "y": -11
+        "x": 0.25,
+        "y": 1.5
       },
-      "colour": "Blue"
+      "colour": "Blue",
+      "width": 0.5,
+      "height": 25,
+      "angle": 0
     }
   ],
   "lineCounts": {

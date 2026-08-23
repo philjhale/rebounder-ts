@@ -42,17 +42,23 @@
   "colourChangers": [
     {
       "position": {
-        "x": -3,
-        "y": -11
+        "x": -2.75,
+        "y": 1.5
       },
-      "colour": "Green"
+      "colour": "Green",
+      "width": 0.5,
+      "height": 25,
+      "angle": 0
     },
     {
       "position": {
-        "x": 2.5,
-        "y": -11
+        "x": 2.75,
+        "y": 1.5
       },
-      "colour": "Blue"
+      "colour": "Blue",
+      "width": 0.5,
+      "height": 25,
+      "angle": 0
     }
   ],
   "lineCounts": {
