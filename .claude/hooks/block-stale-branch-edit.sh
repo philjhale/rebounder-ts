@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
-# PreToolUse hook (Edit|Write|NotebookEdit): blocks edits when the current
-# branch's PR is already MERGED — catches stale worktree checkouts left
-# over from a finished, already-shipped task before new commits land on them.
+# PreToolUse hook (Edit|Write|NotebookEdit): blocks edits on main/master
+# (this repo's workflow requires a worktree branch), and blocks edits when
+# the current branch's PR is already MERGED — catches stale worktree
+# checkouts left over from a finished, already-shipped task before new
+# commits land on them.
 set -euo pipefail
 
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || exit 0
 case "$branch" in
-  main|master|HEAD) exit 0 ;;
+  main|master)
+    echo "Blocked: edits are not allowed directly on '$branch'." >&2
+    echo "This repo's workflow requires a worktree branch: git worktree add .worktrees/<branch> -b <branch> origin/$branch" >&2
+    exit 2
+    ;;
+  HEAD) exit 0 ;;
 esac
 
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
