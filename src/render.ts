@@ -10,7 +10,7 @@ import {
   targetSprite,
   type SpriteName,
 } from './sprites';
-import type { ObstacleData } from './types';
+import type { ColourChangerData, ObstacleData } from './types';
 import {
   BALL_RADIUS,
   LINE_RADIUS,
@@ -50,13 +50,9 @@ export function screenToWorld(screenX: number, screenY: number): Vec2 {
 // 32x32px) — the pixel-to-world scale that made them line up isn't present
 // in this repo. Each sprite is instead drawn at a fixed world-unit size for
 // its longer edge, preserving its own aspect ratio.
-const SPRITE_WORLD_SIZE: Record<
-  'Launcher' | 'Target' | 'ColourChanger' | 'Teleporter' | 'Ball',
-  number
-> = {
+const SPRITE_WORLD_SIZE: Record<'Launcher' | 'Target' | 'Teleporter' | 'Ball', number> = {
   Launcher: 2.4,
   Target: 3,
-  ColourChanger: 2,
   Teleporter: 2,
   Ball: BALL_RADIUS * 2,
 };
@@ -140,6 +136,68 @@ function drawSprite(
   drawImageCentred(ctx, image, worldX, worldY, scaleToFit(image, SPRITE_WORLD_SIZE[category]));
 }
 
+// Tiled-sprite patterns are cached per (image, tile size) since renderLevel
+// runs every animation frame — rebuilding the offscreen tile canvas and
+// CanvasPattern from scratch each frame would otherwise churn allocations
+// for every Obstacle/ColourChanger, every frame.
+const tilePatternCache = new Map<string, CanvasPattern>();
+
+function getTilePattern(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  tileWidthPx: number,
+  tileHeightPx: number,
+): CanvasPattern | undefined {
+  const key = [image.src, tileWidthPx, tileHeightPx].join('|');
+  const cached = tilePatternCache.get(key);
+  if (cached) return cached;
+
+  const tile = document.createElement('canvas');
+  tile.width = tileWidthPx;
+  tile.height = tileHeightPx;
+  const tileCtx = tile.getContext('2d');
+  if (!tileCtx) return undefined;
+  tileCtx.drawImage(image, 0, 0, tileWidthPx, tileHeightPx);
+  const pattern = ctx.createPattern(tile, 'repeat');
+  if (!pattern) return undefined;
+
+  tilePatternCache.set(key, pattern);
+  return pattern;
+}
+
+// Draws a sprite tiled across a box of the given world-space width/height,
+// rotated about its centre. Shared by Obstacle (a square tile repeated in
+// both axes) and ColourChanger (a narrow strip repeated along its length) —
+// both are tk2d tiled sprites in the original that stretch to fill their
+// BoxCollider rather than rendering as one fixed-size icon.
+function drawTiledSprite(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  centreX: number,
+  centreY: number,
+  widthPx: number,
+  heightPx: number,
+  tileWidthPx: number,
+  tileHeightPx: number,
+  angleDegrees: number,
+) {
+  const pattern = getTilePattern(ctx, image, tileWidthPx, tileHeightPx);
+  if (!pattern) return;
+
+  // Canvas rotation is the mirror image of world rotation (worldToScreen
+  // flips y), so the clockwise-positive world angle becomes a
+  // counter-clockwise (negated) canvas rotation.
+  const angleRadians = (-angleDegrees * Math.PI) / 180;
+
+  ctx.save();
+  ctx.translate(centreX, centreY);
+  ctx.rotate(angleRadians);
+  ctx.translate(-widthPx / 2, -heightPx / 2);
+  ctx.fillStyle = pattern;
+  ctx.fillRect(0, 0, widthPx, heightPx);
+  ctx.restore();
+}
+
 // Obstacle.png is a small square tile, one world unit per repeat, meant to
 // be tiled across the obstacle's authored width/height rather than stretched.
 function drawObstacle(
@@ -147,34 +205,50 @@ function drawObstacle(
   sprites: Map<SpriteName, HTMLImageElement>,
   obstacle: ObstacleData,
 ) {
-  const widthPx = obstacle.width * PIXELS_PER_UNIT;
-  const heightPx = obstacle.height * PIXELS_PER_UNIT;
-  const screen = worldToScreen(obstacle.position.x, obstacle.position.y);
-
   const image = sprites.get('Obstacle');
   if (!image) return;
 
-  const tile = document.createElement('canvas');
-  tile.width = PIXELS_PER_UNIT;
-  tile.height = PIXELS_PER_UNIT;
-  const tileCtx = tile.getContext('2d');
-  if (!tileCtx) return;
-  tileCtx.drawImage(image, 0, 0, PIXELS_PER_UNIT, PIXELS_PER_UNIT);
-  const pattern = ctx.createPattern(tile, 'repeat');
-  if (!pattern) return;
+  const screen = worldToScreen(obstacle.position.x, obstacle.position.y);
+  drawTiledSprite(
+    ctx,
+    image,
+    screen.x,
+    screen.y,
+    obstacle.width * PIXELS_PER_UNIT,
+    obstacle.height * PIXELS_PER_UNIT,
+    PIXELS_PER_UNIT,
+    PIXELS_PER_UNIT,
+    obstacle.angle,
+  );
+}
 
-  // Canvas rotation is the mirror image of world rotation (worldToScreen
-  // flips y), so the clockwise-positive world angle becomes a
-  // counter-clockwise (negated) canvas rotation.
-  const angleRadians = (-obstacle.angle * Math.PI) / 180;
+// ColourChanger.png is a narrow vertical strip, tiled along the authored
+// height (its length) at a tile width matching the authored width, rather
+// than drawn as one fixed-size icon — mirroring the original's tk2d tiled
+// sprite, which stretches to fill its BoxCollider.
+function drawColourChanger(
+  ctx: CanvasRenderingContext2D,
+  sprites: Map<SpriteName, HTMLImageElement>,
+  name: SpriteName,
+  colourChanger: ColourChangerData,
+) {
+  const image = sprites.get(name);
+  if (!image) return;
 
-  ctx.save();
-  ctx.translate(screen.x, screen.y);
-  ctx.rotate(angleRadians);
-  ctx.translate(-widthPx / 2, -heightPx / 2);
-  ctx.fillStyle = pattern;
-  ctx.fillRect(0, 0, widthPx, heightPx);
-  ctx.restore();
+  const screen = worldToScreen(colourChanger.position.x, colourChanger.position.y);
+  const widthPx = colourChanger.width * PIXELS_PER_UNIT;
+  const tileHeightPx = widthPx * (image.height / image.width);
+  drawTiledSprite(
+    ctx,
+    image,
+    screen.x,
+    screen.y,
+    widthPx,
+    colourChanger.height * PIXELS_PER_UNIT,
+    widthPx,
+    tileHeightPx,
+    colourChanger.angle,
+  );
 }
 
 // Launcher is two layered sprites in the original (an outer housing plus a
@@ -279,7 +353,7 @@ export function renderLevel(
   }
 
   for (const colourChanger of level.colourChangers) {
-    drawSprite(
+    drawColourChanger(
       ctx,
       sprites,
       animatedSpriteName(
@@ -288,9 +362,7 @@ export function renderLevel(
         COLOUR_CHANGER_FPS,
         elapsedTime,
       ),
-      colourChanger.position.x,
-      colourChanger.position.y,
-      'ColourChanger',
+      colourChanger,
     );
   }
 
