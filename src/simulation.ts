@@ -8,7 +8,6 @@ export const TARGET_RADIUS = 1;
 export const TARGET_HIT_THRESHOLD = 5;
 export const TARGET_DRAIN_INTERVAL = 2;
 export const TELEPORTER_RADIUS = 1;
-export const COLOUR_CHANGER_RADIUS = 1;
 // How far past the paired Teleporter's position a teleported Ball is placed,
 // along its direction of travel, so it doesn't immediately re-trigger the
 // same Teleporter pair (mirrors the original's Teleporter.cs offset).
@@ -254,7 +253,7 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
   }
 
   for (const colourChanger of level.colourChangers) {
-    const collision = circleVsCircle(position, BALL_RADIUS, colourChanger.position, COLOUR_CHANGER_RADIUS);
+    const collision = circleVsObstacle(position, BALL_RADIUS, colourChanger);
     if (!collision) continue;
 
     colour = colourChanger.colour;

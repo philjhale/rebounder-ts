@@ -33,8 +33,7 @@ export interface TeleporterData {
   pairId: string;
 }
 
-export interface ColourChangerData {
-  position: Vec2;
+export interface ColourChangerData extends ObstacleData {
   colour: Colour;
 }
 

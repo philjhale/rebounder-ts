@@ -29,14 +29,20 @@
         "x": 6,
         "y": 2
       },
-      "colour": "Blue"
+      "colour": "Blue",
+      "width": 0.5,
+      "height": 24,
+      "angle": 90
     },
     {
       "position": {
         "x": 6,
         "y": -2
       },
-      "colour": "Blue"
+      "colour": "Blue",
+      "width": 0.5,
+      "height": 24,
+      "angle": 90
     }
   ],
   "lineCounts": {
