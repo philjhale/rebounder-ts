@@ -223,9 +223,12 @@ function stepBall(ball: Ball, level: Level, lines: Line[], deltaTime: number): B
     ({ position, velocity } = bounce);
   }
 
-  // Lines bounce Balls physically regardless of Colour match — only scoring
-  // against Targets is Colour-gated.
+  // Two coloured (non-Orange) Line/Ball pairs only bounce when their Colours
+  // match; Orange has no colour-specific layer in the original, so an Orange
+  // Line or Ball always bounces regardless of the other's Colour.
   for (const line of lines) {
+    if (line.colour !== 'Orange' && colour !== 'Orange' && line.colour !== colour) continue;
+
     const collision = circleVsSegment(position, BALL_RADIUS, line.a, line.b, LINE_RADIUS);
     if (!collision) continue;
 
