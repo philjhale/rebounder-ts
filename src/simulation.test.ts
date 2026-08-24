@@ -749,7 +749,7 @@ describe('updateGame: deleting Lines', () => {
 });
 
 describe('updateGame: Balls vs Lines', () => {
-  it('bounces a Ball off a Line regardless of colour match, preserving speed', () => {
+  it('bounces an Orange Ball off a coloured Line, preserving speed', () => {
     const level = makeLevel({ lineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 } });
     let state: GameState = createInitialState(level);
     state = {
@@ -770,5 +770,74 @@ describe('updateGame: Balls vs Lines', () => {
     const ball = state.balls[0];
     expect(ball.velocity.x).toBeLessThan(0);
     expect(Math.hypot(ball.velocity.x, ball.velocity.y)).toBeCloseTo(BALL_SPEED);
+  });
+
+  it('bounces a coloured Ball off an Orange Line, preserving speed', () => {
+    const level = makeLevel({ lineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Orange', a: { x: 5, y: -5 }, b: { x: 5, y: 5 } }],
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - 0.25 - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Blue',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    const ball = state.balls[0];
+    expect(ball.velocity.x).toBeLessThan(0);
+    expect(Math.hypot(ball.velocity.x, ball.velocity.y)).toBeCloseTo(BALL_SPEED);
+  });
+
+  it('bounces a Ball off a Line of the same non-Orange Colour, preserving speed', () => {
+    const level = makeLevel({ lineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Blue', a: { x: 5, y: -5 }, b: { x: 5, y: 5 } }],
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - 0.25 - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Blue',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    const ball = state.balls[0];
+    expect(ball.velocity.x).toBeLessThan(0);
+    expect(Math.hypot(ball.velocity.x, ball.velocity.y)).toBeCloseTo(BALL_SPEED);
+  });
+
+  it('lets a Ball pass through a Line of a different non-Orange Colour', () => {
+    const level = makeLevel({ lineCounts: { Orange: 0, Blue: 0, Green: 0, Purple: 0 } });
+    let state: GameState = createInitialState(level);
+    state = {
+      ...state,
+      lines: [{ id: 0, colour: 'Green', a: { x: 5, y: -5 }, b: { x: 5, y: 5 } }],
+      balls: [
+        {
+          id: 0,
+          position: { x: 5 - 0.25 - BALL_RADIUS - 0.01, y: 0 },
+          velocity: { x: BALL_SPEED, y: 0 },
+          colour: 'Blue',
+        },
+      ],
+    };
+
+    state = updateGame(state, NO_INPUT, 0.05);
+
+    const ball = state.balls[0];
+    expect(ball.velocity.x).toBeCloseTo(BALL_SPEED);
+    expect(ball.velocity.y).toBeCloseTo(0);
   });
 });

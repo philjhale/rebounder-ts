@@ -5,7 +5,7 @@ A browser/TypeScript port of the Unity game *Rebounder*: the player draws rotata
 ## Language
 
 **Line**:
-A player-drawn segment the player can rotate (by dragging one end) or drag bodily, which deflects Balls of the matching Colour. Called "Rebounder" in the game's own art/branding (`Rebounder.png`), but the codebase — and this port — calls it a Line.
+A player-drawn segment the player can rotate (by dragging one end) or drag bodily. A coloured Line only physically deflects Balls of its own Colour; an Orange Line deflects Balls of any Colour, since Orange has no colour-specific physics layer in the original. Called "Rebounder" in the game's own art/branding (`Rebounder.png`), but the codebase — and this port — calls it a Line.
 _Avoid_: Rebounder, Paddle, Rail
 
 **LineHandle**:
@@ -18,7 +18,7 @@ The body of a Line between its two LineHandles — the part Balls actually colli
 The per-Level budget of how many Lines of each Colour the player is allowed to have drawn at once. Drawing a Line consumes one; deleting it refunds one.
 
 **Ball**:
-A constant-speed, colour-tagged projectile fired by a Launcher. Only deflects off Lines/Obstacles physically; only scores against a Target of its own Colour.
+A constant-speed, colour-tagged projectile fired by a Launcher. Deflects off Obstacles physically regardless of Colour, but off a Line only when the Ball or the Line is Orange or their Colours match; only scores against a Target of its own Colour.
 
 **Launcher**:
 A fixed-position, fixed-Colour emitter that fires Balls on a timer. A short tap toggles all Launchers on the Level on/off; a long-press-and-release on a Launcher destroys every Ball currently in play.
