@@ -3,7 +3,7 @@ import { required } from './dom';
 /**
  * Render functions for the menu-flow screens that are static DOM/CSS chrome
  * (ADR 0006) with no game-loop or picker state of their own: `title`,
- * `howToPlay`, `credits`, and `allLevelsComplete`. The `picker` screen is
+ * `howToPlay`, and `allLevelsComplete`. The `picker` screen is
  * `renderLevelPicker` (levelPicker.ts) and the `level` screen (plus its
  * Pause/Level Complete overlays) lives in main.ts alongside the game loop
  * it's coupled to. main.ts's `Screen` state machine owns when each of these
@@ -20,7 +20,6 @@ function bindAction(container: HTMLElement, action: string, listener: () => void
 export interface TitleScreenOptions {
   onPlay: () => void;
   onHowToPlay: () => void;
-  onCredits: () => void;
 }
 
 export function renderTitleScreen(container: HTMLElement, options: TitleScreenOptions): void {
@@ -29,13 +28,11 @@ export function renderTitleScreen(container: HTMLElement, options: TitleScreenOp
       <h1>Rebounder</h1>
       <button type="button" class="menu-screen__button" data-action="play">Play</button>
       <button type="button" class="menu-screen__button" data-action="how-to-play">How To Play</button>
-      <button type="button" class="menu-screen__button" data-action="credits">Credits</button>
     </div>
   `;
 
   bindAction(container, 'play', options.onPlay);
   bindAction(container, 'how-to-play', options.onHowToPlay);
-  bindAction(container, 'credits', options.onCredits);
 }
 
 export interface HowToPlayScreenOptions {
@@ -59,22 +56,6 @@ export function renderHowToPlayScreen(
   `;
 
   bindAction(container, 'continue', options.onContinue);
-}
-
-export interface CreditsScreenOptions {
-  onBack: () => void;
-}
-
-export function renderCreditsScreen(container: HTMLElement, options: CreditsScreenOptions): void {
-  container.innerHTML = `
-    <div class="menu-screen" data-testid="credits-screen">
-      <h1>Credits</h1>
-      <p>Rebounder — a browser port of the original Unity game.</p>
-      <button type="button" class="menu-screen__button" data-action="back">Back</button>
-    </div>
-  `;
-
-  bindAction(container, 'back', options.onBack);
 }
 
 export interface AllLevelsCompleteScreenOptions {

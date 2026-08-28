@@ -9,7 +9,6 @@ import { renderHud } from './hud';
 import {
   renderTitleScreen,
   renderHowToPlayScreen,
-  renderCreditsScreen,
   renderAllLevelsCompleteScreen,
 } from './screens';
 import { hasSeenHowToPlay, setHasSeenHowToPlay } from './save';
@@ -23,7 +22,6 @@ let activeGameLoop: { stop: () => void } | null = null;
 type Screen =
   | { name: 'title' }
   | { name: 'howToPlay' }
-  | { name: 'credits' }
   | { name: 'picker' }
   | { name: 'level'; index: number }
   | { name: 'allLevelsComplete' };
@@ -37,7 +35,6 @@ function goTo(screen: Screen): void {
       renderTitleScreen(app, {
         onPlay: () => { goTo({ name: 'picker' }); },
         onHowToPlay: () => { goTo({ name: 'howToPlay' }); },
-        onCredits: () => { goTo({ name: 'credits' }); },
       });
       return;
     case 'howToPlay':
@@ -47,9 +44,6 @@ function goTo(screen: Screen): void {
           goTo({ name: 'title' });
         },
       });
-      return;
-    case 'credits':
-      renderCreditsScreen(app, { onBack: () => { goTo({ name: 'title' }); } });
       return;
     case 'picker':
       renderLevelPicker(app, {
