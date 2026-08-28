@@ -3,3 +3,5 @@ node_modules/
 dist/
 *.tsbuildinfo
 .worktrees/
+graphify-out/
+*.graphify-bak
