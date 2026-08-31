@@ -53,6 +53,9 @@ Install:
 uv tool install graphifyy
 # or: pipx install graphifyy
 graphify install
+graphify hook install
 ```
+
+`graphify-out/` (the graph itself) is committed to the repo so nobody has to regenerate it from scratch. `graphify hook install` wires up git hooks that keep it current automatically — rebuilding on every commit and branch switch (AST-only, no API cost) and merging `graph.json` cleanly instead of producing conflict markers. After a `git pull`, run `graphify update .` to pick up teammates' changes.
 
 See the [graphify install docs](https://github.com/Graphify-Labs/graphify#install) for platform-specific setup and troubleshooting.
