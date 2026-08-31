@@ -42,3 +42,20 @@ This starts Vite and prints a local URL to open in your browser.
 - `src/levels/` — individual level definitions (JSON)
 - `public/sprites/` — game art
 - `docs/` — agent-facing documentation (issue tracker, triage labels, domain docs workflow)
+
+## graphify (AI assistant tooling)
+
+This repo uses [graphify](https://github.com/Graphify-Labs/graphify) to give AI coding assistants a queryable knowledge graph of the codebase (see the `## graphify` section in [CLAUDE.md](CLAUDE.md)). It's not required to build or run the game — only for assistants working on the codebase.
+
+Install:
+
+```sh
+uv tool install graphifyy
+# or: pipx install graphifyy
+graphify install
+graphify hook install
+```
+
+`graphify-out/` (the graph itself) is committed to the repo so nobody has to regenerate it from scratch. `graphify hook install` wires up git hooks that keep it current automatically — rebuilding on every commit and branch switch (AST-only, no API cost) and merging `graph.json` cleanly instead of producing conflict markers. After a `git pull`, run `graphify update .` to pick up teammates' changes.
+
+See the [graphify install docs](https://github.com/Graphify-Labs/graphify#install) for platform-specific setup and troubleshooting.
